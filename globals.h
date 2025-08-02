@@ -9,6 +9,8 @@ namespace {
 	const int PLAYAREA_HEIGHT = 700; // プレイエリアの高さ
 	const int PLAYAREA_MARGIN_LEFT = 232; // プレイエリアの左マージン
 	const int PLAYAREA_MARGIN_TOP = 34; // プレイエリアの上マージン
+	const int PLAYAREA_GRID_WIDTH = 80; // グリッドの幅
+	const int PLAYAREA_GRID_HEIGHT = 100; // グリッドの高さ
 
 	
 }
