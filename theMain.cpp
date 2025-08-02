@@ -1,6 +1,9 @@
 #include "DxLib.h"
+#include "GameObject.h"
 #include "globals.h"
 #include "input.h"
+#include <vector>
+#include "Playarea.h"
 
 
 namespace
@@ -10,6 +13,9 @@ namespace
 	int prevTime;
 }
 
+
+std::vector<GameObject*> gameObjects;
+std::vector<GameObject*> newObjects;
 
 float gDeltaTime = 0.0f; // フレーム間の時間差
 
@@ -48,6 +54,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	crrTime = GetNowCount();
 	prevTime = GetNowCount();
 
+	Playarea* playarea = new Playarea(); // プレイエリアの初期化
+
 	while (true)
 	{
 		ClearDrawScreen();
@@ -60,6 +68,37 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		//ここにやりたい処理を書く
 
+		if (newObjects.size() > 0) {
+			for (auto& obj : newObjects)
+			{
+				gameObjects.push_back(obj);
+			}
+			newObjects.clear();
+		}
+
+
+		for (auto& obj : gameObjects) {
+			if (obj->IsAlive())
+			{
+				obj->Update();
+			}
+		}
+		for (auto& obj : gameObjects) {
+			if (obj->IsAlive())
+			{
+				obj->Draw();
+			}
+		}
+		for (auto it = gameObjects.begin(); it != gameObjects.end();) {
+			if (!(*it)->IsAlive())
+			{
+				delete* it;
+				it = gameObjects.erase(it);
+			}
+			else {
+				it++;
+			}
+		}
 
 		ScreenFlip();
 		WaitTimer(16);
