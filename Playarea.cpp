@@ -1,8 +1,9 @@
 #include "Playarea.h"
 #include "DxLib.h"
+#include "Input.h"
 
 Playarea::Playarea():
-	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT)
+	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),selected_(-1,-1),preSelect_(-1)
 {
 	for (int i = 0; i < PLAYAREA_GRID_NUM_X * PLAYAREA_GRID_NUM_Y; i++) {
 		float x = (i % (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
@@ -24,6 +25,31 @@ Playarea::~Playarea()
 
 void Playarea::Update()
 {
+    int mouseX, mouseY;
+    if (GetMousePoint(&mouseX, &mouseY) == -1)
+    {
+        return;
+    }
+	if (Input::IsButtonDown(MOUSE_INPUT_LEFT))
+	{
+		isHold_ = true;
+	}
+	isInPlayArea_ = (mouseX > areaRect_.x && mouseX < areaRect_.x + areaRect_.w &&
+        mouseY > areaRect_.y && mouseY < areaRect_.y + areaRect_.h);
+	if (isInPlayArea_) {
+		selected_.x = (mouseX - areaRect_.x) / PLAYAREA_GRID_WIDTH;
+		selected_.y = (mouseY - areaRect_.y) / PLAYAREA_GRID_HEIGHT;
+		int selectNum = selected_.y * PLAYAREA_GRID_NUM_X + selected_.x;
+		
+		if (isHold_)
+		{
+			if (!(preSelect_ = selectNum))
+			{
+
+			}
+		}
+		preSelect_ = selectNum;
+	}
 }
 
 void Playarea::Draw()

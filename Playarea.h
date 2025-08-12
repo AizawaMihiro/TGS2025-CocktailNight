@@ -9,6 +9,10 @@ class Playarea :
 private:
 	Rect areaRect_; // プレイエリアの矩形
 	std::vector<Piece*> pieces_;
+	bool isInPlayArea_ = false;
+	bool isHold_;
+	Point selected_;
+	int preSelect_;
 public:
     Playarea();
     ~Playarea();

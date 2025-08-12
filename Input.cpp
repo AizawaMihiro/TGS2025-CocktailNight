@@ -9,6 +9,10 @@ namespace Input {
 	char key_down[KEY_MAX];		//押された瞬間 
 	char key_up[KEY_MAX];		//離された瞬間 
 	char Key_Keep[KEY_MAX];		//押しっぱなし
+
+	int mousePre;
+	int mouseNow;
+	int mouseInputXor;//前フレームと現フレーム xor 
 }
 
 void Input::KeyStateUpdate()
@@ -25,6 +29,10 @@ void Input::KeyStateUpdate()
 		key_down[i] = key_xor & keyBuff[i];		//押された瞬間 = (現フレームとkey_xorのAND) 
 		key_up[i] = key_xor & keyBuffOld[i];	//離された瞬間 = (前フレームとkey_xorのAND) 
 	}
+
+	mousePre = mouseNow;//前フレームのマウスの状態を保存
+	mouseNow = GetMouseInput();//現在のマウスの状態を取得
+	mouseInputXor = mousePre ^ mouseNow;//前フレームと現フレーム xor 
 }
 
 bool Input::IsKeyUP(int keyCode)
@@ -40,4 +48,34 @@ bool Input::IsKeyDown(int keyCode)
 int Input::IsKeepKeyDown(int keyCode)
 {
 	return(Key_Keep[keyCode]);
+}
+
+bool Input::IsMouseDown()
+{
+	return(mouseNow && !mousePre);
+}
+
+bool Input::IsMouseUP()
+{
+	return (!mouseNow && mousePre);
+}
+
+bool Input::IsMouseKeep()
+{
+	return (mouseNow && mousePre);
+}
+
+bool Input::IsButtonDown(int button)
+{
+	return(((mousePre & button) == 0) && ((mouseNow & button) != 0));
+}
+
+bool Input::IsButtonUP(int button)
+{
+	return(((mousePre & button) != 0) && ((mouseNow & button) == 0));
+}
+
+bool Input::IsButtonKeep(int button)
+{
+	return(((mousePre & button) != 0) && ((mouseNow & button) != 0));
 }
