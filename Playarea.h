@@ -18,5 +18,6 @@ public:
     ~Playarea();
     void Update() override;
 	void Draw() override;
+	void SwapPosPiece(int a, int b);
 };
 

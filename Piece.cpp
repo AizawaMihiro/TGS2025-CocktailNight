@@ -8,6 +8,7 @@ Piece::Piece():
 	type_ = 0; // ÉsÅ[ÉXÇÃéÌóﬁÇèâä˙âª
 	hImage_ = LoadGraph("image/keyboard_0.png", 1);
 	isSelected_ = false;
+	isDrawable_ = false;
 	SetAlive(true);
 	AddGameObject(this);
 }
@@ -42,12 +43,18 @@ Piece::Piece(Rect pos, int type) :
 		break;
 	}
 	isSelected_ = false;
+	isDrawable_ = true;
 	SetAlive(true);
 	AddGameObject(this);
 }
 
 Piece::~Piece()
 {
+	if (hImage_ != -1) {
+		DeleteGraph(hImage_);
+		hImage_ = -1;
+	}
+	isAlive_ = false;
 }
 
 void Piece::Update()
@@ -56,5 +63,18 @@ void Piece::Update()
 
 void Piece::Draw()
 {
-	DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
+	if (isDrawable_)
+	{
+		//DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
+	}
+}
+
+void Piece::SetPos(Rect pos)
+{
+	Pos_ = pos;
+}
+
+Rect Piece::GetPos()
+{
+	return Pos_;
 }

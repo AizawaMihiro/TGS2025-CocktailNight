@@ -39,14 +39,20 @@ void Playarea::Update()
 	if (isInPlayArea_) {
 		selected_.x = (mouseX - areaRect_.x) / PLAYAREA_GRID_WIDTH;
 		selected_.y = (mouseY - areaRect_.y) / PLAYAREA_GRID_HEIGHT;
+		DrawBox(selected_.x * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT, selected_.y * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP,
+			(selected_.x + 1) * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT, (selected_.y + 1) * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP,
+			GetColor(255, 0, 0), 0, 2);
 		int selectNum = selected_.y * PLAYAREA_GRID_NUM_X + selected_.x;
-		
+
+		DrawFormatString(0, 10, GetColor(255, 255, 255), "%d", selectNum);
+		DrawFormatString(0, 30, GetColor(255, 255, 255), "%d", preSelect_);
 		if (isHold_)
 		{
-			if (!(preSelect_ = selectNum))
+			if (preSelect_ != selectNum)
 			{
-
+				SwapPosPiece(preSelect_, selectNum);
 			}
+			isHold_ = false;
 		}
 		preSelect_ = selectNum;
 	}
@@ -68,5 +74,17 @@ void Playarea::Draw()
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		DrawBox(areaRect_.x, areaRect_.y, areaRect_.x + areaRect_.w, areaRect_.y + areaRect_.h, GetColor(255, 255, 255), false, 3);
+	}
+}
+
+void Playarea::SwapPosPiece(int a, int b)
+{
+	if (a <= pieces_.size() && b <= pieces_.size())
+	{
+		Piece* blankP = new Piece;
+		blankP->SetPos(pieces_[a]->GetPos());
+		pieces_[a]->SetPos(pieces_[b]->GetPos());
+		pieces_[b]->SetPos(blankP->GetPos());
+		delete blankP;
 	}
 }
