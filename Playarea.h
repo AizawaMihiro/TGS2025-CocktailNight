@@ -13,6 +13,7 @@ private:
 	bool isHold_;
 	Point selected_;
 	int preSelect_;
+	float checkTimer_;
 public:
     Playarea();
     ~Playarea();

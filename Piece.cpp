@@ -65,7 +65,7 @@ void Piece::Draw()
 {
 	if (isDrawable_)
 	{
-		//DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
+		DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
 	}
 }
 
