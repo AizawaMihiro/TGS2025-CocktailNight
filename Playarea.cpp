@@ -30,7 +30,7 @@ void Playarea::Update()
     {
         return;
     }
-	if (Input::IsButtonDown(MOUSE_INPUT_LEFT))
+	if (Input::IsButtonKeep(MOUSE_INPUT_LEFT))
 	{
 		isHold_ = true;
 	}
@@ -45,21 +45,16 @@ void Playarea::Update()
 
 		if (isHold_)
 		{
+			DrawFormatString(0, 40, GetColor(255, 255, 255), "HOLD!");
 			if (preSelect_ != selectNum)
 			{
+				int sub = preSelect_ - selectNum;
+				DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", sub);
 				SwapPosPiece(preSelect_, selectNum);
 			}
 			isHold_ = false;
 		}
-		if (checkTimer_ >= 0.3f)
-		{
-			preSelect_ = selectNum;
-			checkTimer_ -= 0.3f;
-		}
-		else
-		{
-			checkTimer_ += GetDeltaTime();
-		}
+		preSelect_ = selectNum;
 	}
 }
 
@@ -90,6 +85,6 @@ void Playarea::SwapPosPiece(int a, int b)
 		blankP->SetPos(pieces_[a]->GetPos());
 		pieces_[a]->SetPos(pieces_[b]->GetPos());
 		pieces_[b]->SetPos(blankP->GetPos());
-		delete blankP;
+		blankP->SetAlive(false);
 	}
 }
