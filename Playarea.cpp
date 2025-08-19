@@ -81,10 +81,20 @@ void Playarea::SwapPosPiece(int a, int b)
 {
 	if (a <= pieces_.size() && b <= pieces_.size())
 	{
+		//ˆÊ’uî•ñ‚ÌŒðŠ·
 		Piece* blankP = new Piece;
 		blankP->SetPos(pieces_[a]->GetPos());
 		pieces_[a]->SetPos(pieces_[b]->GetPos());
 		pieces_[b]->SetPos(blankP->GetPos());
 		blankP->SetAlive(false);
+
+		//”z—ñ“à‚ÌˆÊ’uŒðŠ·
+		std::vector<Piece*> swaped = pieces_;
+		swaped.erase(swaped.begin() + a);
+		swaped.insert(swaped.begin() + a, pieces_[b]);
+		swaped.erase(swaped.begin() + b);
+		swaped.insert(swaped.begin() + b, pieces_[a]);
+		pieces_.swap(swaped);
+		swaped.clear();
 	}
 }
