@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "input.h"
 #include <vector>
+#include <algorithm>
 #include "Playarea.h"
 
 
@@ -83,6 +84,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				obj->Update();
 			}
 		}
+		std::sort(gameObjects.begin(), gameObjects.end());
 		for (auto& obj : gameObjects) {
 			if (obj->IsAlive())
 			{

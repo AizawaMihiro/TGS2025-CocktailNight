@@ -19,25 +19,31 @@ Piece::Piece(Rect pos, int type) :
 	switch (type_)
 	{
 	case 0:
-		hImage_ = LoadGraph("image/keyboard_0.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece1.png", 1);
 		break;
 	case 1:
-		hImage_ = LoadGraph("image/keyboard_1.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece2.png", 1);
 		break;
 	case 2:
-		hImage_ = LoadGraph("image/keyboard_2.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece3.png", 1);
 		break;
 	case 3:
-		hImage_ = LoadGraph("image/keyboard_3.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece4.png", 1);
 		break;
 	case 4:
-		hImage_ = LoadGraph("image/keyboard_4.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece5.png", 1);
 		break;
 	case 5:
-		hImage_ = LoadGraph("image/keyboard_5.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece6.png", 1);
 		break;
 	case 6:
-		hImage_ = LoadGraph("image/keyboard_6.png", 1);
+		hImage_ = LoadGraph("image/piece/Piece7.png", 1);
+		break;
+	case 7:
+		hImage_ = LoadGraph("image/piece/Piece8.png", 1);
+		break;
+	case 8:
+		hImage_ = LoadGraph("image/piece/Piece9.png", 1);
 		break;
 	default:
 		break;
@@ -45,6 +51,7 @@ Piece::Piece(Rect pos, int type) :
 	isSelected_ = false;
 	isDrawable_ = true;
 	SetAlive(true);
+	SetPriority(40);
 	AddGameObject(this);
 }
 
@@ -65,7 +72,10 @@ void Piece::Draw()
 {
 	if (isDrawable_)
 	{
-		DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+		//DrawExtendGraph(Pos_.x, Pos_.y, Pos_.x + Pos_.w, Pos_.y + Pos_.h, hImage_, 0);
+		//èkè¨ï\é¶íÜ
+		DrawExtendGraph(Pos_.x+3, Pos_.y+3, Pos_.x + Pos_.w-3, Pos_.y + Pos_.h-3, hImage_, 0);
 	}
 }
 

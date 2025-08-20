@@ -3,14 +3,20 @@
 #include "Input.h"
 
 Playarea::Playarea():
-	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),selected_(-1,-1),preSelect_(-1)
+	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
+	selected_(-1,-1),preSelect_(-1),isHold_(false),isPush_(false)
 {
+	hImage_ = LoadGraph("image/BG_bar.jpg");
 	for (int i = 0; i < PLAYAREA_GRID_NUM_X * PLAYAREA_GRID_NUM_Y; i++) {
 		float x = (i % (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
 		float y = (i / (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
-		pieces_.push_back(new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT },i%7));
+		pieces_.push_back(new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT },i%9));
 	}
+	playBGM_ = LoadSoundMem("sound/Tenacity.mp3");
+	ChangeVolumeSoundMem(255 * 0.5, playBGM_);//BGMの音量を調整
+	PlaySoundMem(playBGM_, DX_PLAYTYPE_LOOP);
 	SetAlive(true);
+	SetPriority(10);
 	AddGameObject(this);
 }
 
@@ -20,6 +26,14 @@ Playarea::~Playarea()
 		delete piece; // 各ピースのメモリを解放
 	}
 	pieces_.clear(); // ピースのリストをクリア
+	if (hImage_ != -1) {
+		DeleteGraph(hImage_);
+		hImage_ = -1;
+	}
+	if (playBGM_ != -1) {
+		DeleteSoundMem(playBGM_);
+		playBGM_ = -1;
+	}
 	SetAlive(false); // プレイエリアを非アクティブにする
 }
 
@@ -30,6 +44,10 @@ void Playarea::Update()
     {
         return;
     }
+	if (Input::IsButtonDown(MOUSE_INPUT_LEFT))
+	{
+		isPush_ = true;
+	}
 	if (Input::IsButtonKeep(MOUSE_INPUT_LEFT))
 	{
 		isHold_ = true;
@@ -40,20 +58,21 @@ void Playarea::Update()
 		selected_.x = (mouseX - areaRect_.x) / PLAYAREA_GRID_WIDTH;
 		selected_.y = (mouseY - areaRect_.y) / PLAYAREA_GRID_HEIGHT;
 		int selectNum = (int)selected_.y * PLAYAREA_GRID_NUM_X + (int)selected_.x;
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", selectNum);
-		DrawFormatString(0, 20, GetColor(255, 255, 255), "%d", preSelect_);
+		//DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", selectNum);
+		//DrawFormatString(0, 20, GetColor(255, 255, 255), "%d", preSelect_);
 
 		if (isHold_)
 		{
-			DrawFormatString(0, 40, GetColor(255, 255, 255), "HOLD!");
-			if (preSelect_ != selectNum)
+			if (isPush_)
 			{
-				int sub = preSelect_ - selectNum;
-				DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", sub);
-				SwapPosPiece(preSelect_, selectNum);
+				if (preSelect_ != selectNum)
+				{
+					SwapPosPiece(preSelect_, selectNum);
+					isPush_ = false;
+				}
 			}
-			isHold_ = false;
 		}
+		isHold_ = false;
 		preSelect_ = selectNum;
 	}
 }
@@ -62,6 +81,7 @@ void Playarea::Draw()
 {
 	if (isAlive_)
 	{
+		DrawExtendGraph(0, 0, WIN_WIDTH, WIN_HEIGHT, hImage_,0);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA,120);
 		DrawBox(areaRect_.x, areaRect_.y, areaRect_.x + areaRect_.w, areaRect_.y + areaRect_.h, GetColor(120, 120, 120), true);
 		for (int i = 0; i < PLAYAREA_GRID_NUM_X; i++)
@@ -74,6 +94,7 @@ void Playarea::Draw()
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		DrawBox(areaRect_.x, areaRect_.y, areaRect_.x + areaRect_.w, areaRect_.y + areaRect_.h, GetColor(255, 255, 255), false, 3);
+
 	}
 }
 
