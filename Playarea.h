@@ -7,7 +7,7 @@ class Playarea :
     public GameObject
 {
 private:
-	int hImage_;
+	int hImage_;	//背景（PlaySceneに移動予定）
 	Rect areaRect_; // プレイエリアの矩形
 	std::vector<Piece*> pieces_;
 	bool isInPlayArea_ = false;
@@ -15,7 +15,7 @@ private:
 	bool isHold_;
 	Point selected_;
 	int preSelect_;
-	int playBGM_;
+	int playBGM_;	//（PlaySceneに移動予定）
 	int pieceSelectSound_;
 	int pieceSwapSound_;
 public:

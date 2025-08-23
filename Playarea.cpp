@@ -10,10 +10,11 @@ Playarea::Playarea():
 	for (int i = 0; i < PLAYAREA_GRID_NUM_X * PLAYAREA_GRID_NUM_Y; i++) {
 		float x = (i % (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
 		float y = (i / (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
-		pieces_.push_back(new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT },i%8));
+		pieces_.push_back(new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT },i%7));
 	}
 	playBGM_ = LoadSoundMem("sound/Tenacity.mp3");
 	pieceSelectSound_ = LoadSoundMem("sound/se/†”ÑŠí‚Ì‚Ó‚½‚ð•Â‚ß‚é.mp3");
+	pieceSwapSound_ = LoadSoundMem("sound/se/ƒjƒ…ƒb1.mp3");
 	ChangeVolumeSoundMem(255 * 0.5, playBGM_);//BGM‚Ì‰¹—Ê‚ð’²®
 	PlaySoundMem(playBGM_, DX_PLAYTYPE_LOOP);
 	SetAlive(true);
@@ -70,6 +71,7 @@ void Playarea::Update()
 				if (preSelect_ != selectNum)
 				{
 					SwapPosPiece(preSelect_, selectNum);
+					PlaySoundMem(pieceSwapSound_, DX_PLAYTYPE_BACK);
 					isPush_ = false;
 				}
 			}
