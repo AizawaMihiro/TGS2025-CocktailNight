@@ -14,7 +14,7 @@ Piece::Piece():
 }
 
 Piece::Piece(Rect pos, int type) :
-	GameObject(), Pos_(pos), type_(type)
+	GameObject(), Pos_(pos), type_(type),chainCounter_(0)
 {
 	switch (type_)
 	{
@@ -47,6 +47,8 @@ Piece::Piece(Rect pos, int type) :
 	}
 	isSelected_ = false;
 	isDrawable_ = true;
+	isChain_ = false;
+	isRemove_ = false;
 	SetAlive(true);
 	SetPriority(40);
 	AddGameObject(this);
@@ -76,12 +78,3 @@ void Piece::Draw()
 	}
 }
 
-void Piece::SetPos(Rect pos)
-{
-	Pos_ = pos;
-}
-
-Rect Piece::GetPos()
-{
-	return Pos_;
-}

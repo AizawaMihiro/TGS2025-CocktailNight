@@ -24,5 +24,6 @@ public:
     void Update() override;
 	void Draw() override;
 	void SwapPosPiece(int a, int b);
+	void CheckPieceChaind();
 };
 

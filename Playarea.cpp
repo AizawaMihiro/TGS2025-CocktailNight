@@ -72,6 +72,8 @@ void Playarea::Update()
 				{
 					SwapPosPiece(preSelect_, selectNum);
 					PlaySoundMem(pieceSwapSound_, DX_PLAYTYPE_BACK);
+
+					CheckPieceChaind();
 					isPush_ = false;
 				}
 			}
@@ -122,4 +124,36 @@ void Playarea::SwapPosPiece(int a, int b)
 		pieces_.swap(swaped);
 		swaped.clear();
 	}
+}
+
+void Playarea::CheckPieceChaind()
+{
+	//垂直方向の確認
+	for (int i = 0; i < PLAYAREA_GRID_NUM_X; i++)
+	{
+		for (int j = 0; j < PLAYAREA_GRID_NUM_Y; j++)
+		{
+			if (i-1>=0 && i+1<PLAYAREA_GRID_NUM_X)
+			{
+				int checkPoint = i * PLAYAREA_GRID_NUM_X + j;
+				int tTester = pieces_[checkPoint]->GetType();
+				if (tTester == pieces_[(i+1)*PLAYAREA_GRID_NUM_X +j]->GetType())
+				{
+					pieces_[checkPoint]->SetChainFlag(true);
+					pieces_[checkPoint]->SetChainCounter(1);
+				}
+				if (tTester == pieces_[(i - 1) * PLAYAREA_GRID_NUM_X + j]->GetType())
+				{
+					pieces_[checkPoint]->SetChainCounter(pieces_[(i - 1) * PLAYAREA_GRID_NUM_X + j]->GetChainCounter()+1);
+				}
+
+			}
+		}
+	}
+
+	//水平方向の確認
+
+	//特殊ボムの確認
+
+	//消去処理
 }
