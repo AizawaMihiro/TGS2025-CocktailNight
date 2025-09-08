@@ -48,7 +48,8 @@ Piece::Piece(Rect pos, int type) :
 	isSelected_ = false;
 	isDrawable_ = true;
 	isChain_ = false;
-	isRemove_ = false;
+	isVerticalChain_ = false;
+	isHorizontalChain_ = false;
 	SetAlive(true);
 	SetPriority(40);
 	AddGameObject(this);

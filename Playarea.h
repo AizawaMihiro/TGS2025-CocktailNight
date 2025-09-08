@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include "globals.h"
-#include <vector>
 #include "Piece.h"
 class Playarea :
     public GameObject
@@ -9,7 +8,7 @@ class Playarea :
 private:
 	int hImage_;	//背景（PlaySceneに移動予定）
 	Rect areaRect_; // プレイエリアの矩形
-	std::vector<Piece*> pieces_;
+	Piece pieces_[PLAYAREA_GRID_NUM_Y][PLAYAREA_GRID_NUM_X];//ピースの配列
 	bool isInPlayArea_ = false;
 	bool isPush_;
 	bool isHold_;

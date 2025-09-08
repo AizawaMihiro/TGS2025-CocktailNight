@@ -7,10 +7,14 @@ Playarea::Playarea():
 	selected_(-1,-1),preSelect_(-1),isHold_(false),isPush_(false)
 {
 	hImage_ = LoadGraph("image/BG_bar.jpg");
-	for (int i = 0; i < PLAYAREA_GRID_NUM_X * PLAYAREA_GRID_NUM_Y; i++) {
-		float x = (i % (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
-		float y = (i / (PLAYAREA_GRID_NUM_X)) * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
-		pieces_.push_back(new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT },i%7));
+	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)
+	{
+		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
+		{
+			float x = j * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
+			float y = i * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
+			pieces_[i][j] = Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }, (i * PLAYAREA_GRID_NUM_X + j) % 7);
+		}
 	}
 	playBGM_ = LoadSoundMem("sound/Tenacity.mp3");
 	pieceSelectSound_ = LoadSoundMem("sound/se/炊飯器のふたを閉める.mp3");
@@ -24,10 +28,6 @@ Playarea::Playarea():
 
 Playarea::~Playarea()
 {
-	for (auto piece : pieces_) {
-		delete piece; // 各ピースのメモリを解放
-	}
-	pieces_.clear(); // ピースのリストをクリア
 	if (hImage_ != -1) {
 		DeleteGraph(hImage_);
 		hImage_ = -1;
@@ -106,54 +106,168 @@ void Playarea::Draw()
 
 void Playarea::SwapPosPiece(int a, int b)
 {
-	if (a <= pieces_.size() && b <= pieces_.size())
+	int maxIndex = PLAYAREA_GRID_NUM_X * PLAYAREA_GRID_NUM_Y - 1;
+	if (a <= maxIndex && b <= maxIndex)
 	{
-		//位置情報の交換
-		Piece* blankP = new Piece;
-		blankP->SetPos(pieces_[a]->GetPos());
-		pieces_[a]->SetPos(pieces_[b]->GetPos());
-		pieces_[b]->SetPos(blankP->GetPos());
-		blankP->SetAlive(false);
+		int ax = a % PLAYAREA_GRID_NUM_X;
+		int ay = a / PLAYAREA_GRID_NUM_X;
+		int bx = b % PLAYAREA_GRID_NUM_X;
+		int by = b / PLAYAREA_GRID_NUM_X;
 
-		//配列内の位置交換
-		std::vector<Piece*> swaped = pieces_;
-		swaped.erase(swaped.begin() + a);
-		swaped.insert(swaped.begin() + a, pieces_[b]);
-		swaped.erase(swaped.begin() + b);
-		swaped.insert(swaped.begin() + b, pieces_[a]);
-		pieces_.swap(swaped);
-		swaped.clear();
+		// 位置情報の交換
+		Rect tempPos = pieces_[ay][ax].GetPos();
+		pieces_[ay][ax].SetPos(pieces_[by][bx].GetPos());
+		pieces_[by][bx].SetPos(tempPos);
+
+		// 配列内の位置交換
+		Piece tempPiece = pieces_[ay][ax];
+		pieces_[ay][ax] = pieces_[by][bx];
+		pieces_[by][bx] = tempPiece;
 	}
 }
 
-void Playarea::CheckPieceChaind()
+void Playarea::CheckPieceChaind()//チェーンの確認と消去
 {
+	//次やること：上端と下端の処理の見直し、特殊ボムの確認
 	//垂直方向の確認
 	for (int i = 0; i < PLAYAREA_GRID_NUM_X; i++)
 	{
 		for (int j = 0; j < PLAYAREA_GRID_NUM_Y; j++)
 		{
-			if (i-1>=0 && i+1<PLAYAREA_GRID_NUM_X)
+			Piece tPiece = pieces_[j][i];
+			int tType = tPiece.GetType();
+			if (j - 1 > 0 && j + 1 < PLAYAREA_GRID_NUM_Y)//中間部
 			{
-				int checkPoint = i * PLAYAREA_GRID_NUM_X + j;
-				int tTester = pieces_[checkPoint]->GetType();
-				if (tTester == pieces_[(i+1)*PLAYAREA_GRID_NUM_X +j]->GetType())
+				if (tType == pieces_[j+1][i].GetType())
 				{
-					pieces_[checkPoint]->SetChainFlag(true);
-					pieces_[checkPoint]->SetChainCounter(1);
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(1);
 				}
-				if (tTester == pieces_[(i - 1) * PLAYAREA_GRID_NUM_X + j]->GetType())
+				if (tType == pieces_[j-1][i].GetType())
 				{
-					pieces_[checkPoint]->SetChainCounter(pieces_[(i - 1) * PLAYAREA_GRID_NUM_X + j]->GetChainCounter()+1);
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(pieces_[j - 1][i].GetChainCounter() + 1);
 				}
+				if (tType != pieces_[j + 1][i].GetType())//一個下が不一致（チェーンしない）
+				{
+					if (tPiece.GetChainCounter() == 2)//二個の場合のみ現在位置と一個上のフラグを解除
+					{
+						tPiece.SetChainFlag(false);
+						pieces_[j - 1][i].SetChainFlag(false);
+						tPiece.SetChainCounter(0);
+						pieces_[j - 1][i].SetChainCounter(0);
+					}
+				}
+			}
+			else if (j + 1 < PLAYAREA_GRID_NUM_Y)//最上部
+			{
+				if (tType == pieces_[j + 1][i].GetType())
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(1);
+				}
+			}
+			else
+			{
+				if (tType == pieces_[j - 1][i].GetType())//最下部
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(pieces_[j - 1][i].GetChainCounter() + 1);
+				}
+				if (tPiece.GetChainCounter() <= 2)
+				{
+					tPiece.SetChainFlag(false);
+					tPiece.SetChainCounter(0);
+				}
+			}
+		}
 
+		for (int j = 0; j < PLAYAREA_GRID_NUM_Y; j++)
+		{
+			Piece tPiece = pieces_[j][i];
+			if (tPiece.GetChainFlag())
+			{
+				tPiece.SetChainFlag(false);
+				tPiece.SetVerticalChainFlag(true);
 			}
 		}
 	}
 
 	//水平方向の確認
+	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)
+	{
+		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
+		{
+			Piece tPiece = pieces_[i][j];
+			int tType = tPiece.GetType();
+			if (j - 1 > 0 && j + 1 < PLAYAREA_GRID_NUM_X)//中間部
+			{
+				if (tType == pieces_[i][j + 1].GetType())
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(1);
+				}
+				if (tType == pieces_[i][j - 1].GetType())
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(pieces_[i][j - 1].GetChainCounter() + 1);
+				}
+				if (tType != pieces_[i][j + 1].GetType())//一個右が不一致（チェーンしない）
+				{
+					if (tPiece.GetChainCounter() == 2)//二個の場合のみ現在位置と一個左のフラグを解除
+					{
+						tPiece.SetChainFlag(false);
+						pieces_[i][j - 1].SetChainFlag(false);
+						tPiece.SetChainCounter(0);
+						pieces_[i][j - 1].SetChainCounter(0);
+					}
+				}
+			}
+			else if (j + 1 < PLAYAREA_GRID_NUM_X)//最左部
+			{
+				if (tType == pieces_[i][j + 1].GetType())
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(1);
+				}
+			}
+			else
+			{
+				if (tType == pieces_[i][j - 1].GetType())//最右部
+				{
+					tPiece.SetChainFlag(true);
+					tPiece.SetChainCounter(pieces_[i][j - 1].GetChainCounter() + 1);
+				}
+				if (tPiece.GetChainCounter() <= 2)
+				{
+					tPiece.SetChainFlag(false);
+					tPiece.SetChainCounter(0);
+				}
+			}
+		}
+		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
+		{
+			Piece tPiece = pieces_[i][j];
+			if (tPiece.GetChainFlag())
+			{
+				tPiece.SetChainFlag(false);
+				tPiece.SetHorizontalChainFlag(true);
+			}
+		}
+	}
 
-	//特殊ボムの確認
+	//特殊ボムの確認(保留)
 
 	//消去処理
+	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)
+	{
+		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
+		{
+			Piece tPiece = pieces_[i][j];
+			if (tPiece.GetVerticalChainFlag() || tPiece.GetHorizontalChainFlag()) {
+				tPiece.SetAlive(false);
+			}
+		}
+	}
+
 }

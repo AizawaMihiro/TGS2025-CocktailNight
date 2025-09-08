@@ -12,7 +12,8 @@ class Piece :
 	bool isDrawable_;	//描画されるか
 	bool isChain_;		//連鎖確認中か
 	int chainCounter_;
-	bool isRemove_;		//マッチで消去される状態か
+	bool isVerticalChain_;
+	bool isHorizontalChain_;
 public:
 	Piece();
 	Piece(Rect pos ,int type);
@@ -23,8 +24,12 @@ public:
 	Rect GetPos() { return Pos_; }
 	int GetType() { return type_; }
 	void SetChainFlag(bool flag) { isChain_ = flag; }
+	bool GetChainFlag() { return isChain_; }
 	void SetChainCounter(int count) { chainCounter_ = count; }
 	int GetChainCounter() { return chainCounter_; }
-	void SetRemoveFlag(bool flag) { isRemove_ = flag; }
+	void SetVerticalChainFlag(bool flag) { isVerticalChain_ = flag; }
+	bool GetVerticalChainFlag() { return isVerticalChain_; }
+	void SetHorizontalChainFlag(bool flag) { isHorizontalChain_ = flag; }
+	bool GetHorizontalChainFlag() { return isHorizontalChain_; }
 };
 
