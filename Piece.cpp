@@ -6,7 +6,7 @@ Piece::Piece():
 {
 	Pos_ = { PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }; // 初期位置とサイズを設定
 	type_ = 0; // ピースの種類を初期化
-	hImage_ = LoadGraph("image/keyboard_0.png", 1);
+	hImage_ = LoadGraph("image/test/keyboard_0.png", 1);
 	isSelected_ = false;
 	isDrawable_ = false;
 	SetAlive(true);
