@@ -8,7 +8,7 @@ class Playarea :
 private:
 	int hImage_;	//背景（PlaySceneに移動予定）
 	Rect areaRect_; // プレイエリアの矩形
-	Piece pieces_[PLAYAREA_GRID_NUM_Y][PLAYAREA_GRID_NUM_X];//ピースの配列
+	Piece* pieces_[PLAYAREA_GRID_NUM_Y][PLAYAREA_GRID_NUM_X];//ピースの配列
 	bool isInPlayArea_ = false;
 	bool isPush_;
 	bool isHold_;
@@ -23,6 +23,7 @@ public:
     void Update() override;
 	void Draw() override;
 	void SwapPosPiece(int a, int b);
-	void CheckPieceChaind();
+	void CheckPieceChaind(int a, int b);
+	void DeleteChaindPiece();
 };
 
