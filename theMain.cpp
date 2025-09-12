@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include "Playarea.h"
-
+#include "BootScene.h"
 
 namespace
 {
@@ -55,7 +55,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	crrTime = GetNowCount();
 	prevTime = GetNowCount();
 
-	Playarea* playarea = new Playarea(); // プレイエリアの初期化
+	//Playarea* playarea = new Playarea(); // プレイエリアの初期化
+	BootScene* bootscene = new BootScene();
 
 	while (true)
 	{

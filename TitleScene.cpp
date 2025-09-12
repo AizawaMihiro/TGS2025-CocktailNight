@@ -12,7 +12,7 @@ TitleScene::~TitleScene()
 void TitleScene::Update()
 {
 	if (CheckHitKey(KEY_INPUT_P)) {
-		SceneManager::ChangeScene("PLAY");
+		SceneManager::ChangeScene("StageSelect");
 	}
 	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
 		SceneManager::Exit();
