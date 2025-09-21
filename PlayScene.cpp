@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include <DxLib.h>
 #include "Playarea.h"
+#include <algorithm>
 
 PlayScene::PlayScene()
 {
@@ -13,12 +14,8 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
-	if (CheckHitKey(KEY_INPUT_P)) {
-		SceneManager::ChangeScene("PLAY");
-	}
-	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
-		SceneManager::Exit();
-	}
+
+	
 }
 
 void PlayScene::Draw()

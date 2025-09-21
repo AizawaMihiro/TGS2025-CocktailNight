@@ -52,6 +52,8 @@ void MyGame()
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	DxInit();
+	SceneManager::Init();
+
 	crrTime = GetNowCount();
 	prevTime = GetNowCount();
 
@@ -68,7 +70,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		float deltaTime = (crrTime - prevTime) / 1000.0f; // 秒単位に変換
 		gDeltaTime = deltaTime; // グローバル変数に保存
 
+		
 		//ここにやりたい処理を書く
+		
+
+		SceneManager::Update();
+		SceneManager::Draw();
+
+
+		if (CheckHitKey(KEY_INPUT_P)) {
+			SceneManager::ChangeScene("PLAY");
+		}
+		if (CheckHitKey(KEY_INPUT_ESCAPE)) {
+			SceneManager::Exit();
+		}
 
 		if (newObjects.size() > 0) {
 			for (auto& obj : newObjects)
@@ -102,7 +117,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				it++;
 			}
 		}
-
+		
 		ScreenFlip();
 		WaitTimer(16);
 
