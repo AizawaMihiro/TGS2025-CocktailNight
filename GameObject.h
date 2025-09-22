@@ -3,16 +3,16 @@
 class GameObject
 {
 protected:
-	bool isAlive_;
-	int drawPriority_;
+	bool isAlive_;//生存フラグ
+	int drawPriority_;//描画優先度
 public:
 	GameObject();
 	virtual ~GameObject();
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
-	bool IsAlive() { return isAlive_; }
-	void SetAlive(bool alive) { isAlive_ = alive; }
-	void SetPriority(int num) { drawPriority_ = num; }
+	bool IsAlive() { return isAlive_; }//生存フラグの取得
+	void SetAlive(bool alive) { isAlive_ = alive; }//生存フラグの設定
+	void SetPriority(int num) { drawPriority_ = num; }//描画優先度の設定
 };
 
 extern std::vector<GameObject*> gameObjects;//externはどこかでこの変数が存在することを表す

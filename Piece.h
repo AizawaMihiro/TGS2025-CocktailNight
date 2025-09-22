@@ -11,7 +11,7 @@ class Piece :
 	bool isSelected_;	//選択されたか
 	bool isDrawable_;	//描画されるか
 	bool isChain_;		//連鎖確認中か
-	int chainCounter_;
+	int chainCounter_;//連鎖数
 	bool isVerticalChain_;
 	bool isHorizontalChain_;
 public:
