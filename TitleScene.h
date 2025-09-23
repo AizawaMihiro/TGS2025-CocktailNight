@@ -8,10 +8,12 @@
 /// </summary>
 class TitleScene : public SceneBase
 {
+private:
+	int hBGImage_;
+	int hTitleImage_;
 public:
 	TitleScene();
 	~TitleScene();
 	void Update() override;
 	void Draw() override;
-	int hImage = -1;
 };

@@ -40,9 +40,6 @@ StageSelect::StageSelect()
 			break;
 		}
 	}
-	SetAlive(true);
-	SetPriority(0);
-	AddGameObject(this);
 }
 
 StageSelect::~StageSelect()
