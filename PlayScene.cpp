@@ -5,7 +5,8 @@
 
 PlayScene::PlayScene()
 {
-	new Playarea();
+	Playarea* playarea = new Playarea();
+	AddGameObject(playarea);
 }
 
 PlayScene::~PlayScene()
@@ -14,7 +15,45 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
+	if (CheckHitKey(KEY_INPUT_P)) {
+		SceneManager::ChangeScene("TITLE");
+	}
+	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
+		SceneManager::Exit();
+	}
 
+	if (newObjects.size() > 0) {
+		for (auto& obj : newObjects)
+		{
+			gameObjects.push_back(obj);
+		}
+		newObjects.clear();
+	}
+
+
+	for (auto& obj : gameObjects) {
+		if (obj->IsAlive())
+		{
+			obj->Update();
+		}
+	}
+	std::sort(gameObjects.begin(), gameObjects.end());
+	for (auto& obj : gameObjects) {
+		if (obj->IsAlive())
+		{
+			obj->Draw();
+		}
+	}
+	for (auto it = gameObjects.begin(); it != gameObjects.end();) {
+		if (!(*it)->IsAlive())
+		{
+			delete* it;
+			it = gameObjects.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
 	
 }
 

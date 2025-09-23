@@ -1,6 +1,6 @@
 #pragma once
 #include "SceneBase.h"
-
+#include "StageSelect.h"
 /// <summary>
 /// タイトルシーン
 /// 
@@ -13,4 +13,6 @@ public:
 	~StageSelectScene();
 	void Update() override;
 	void Draw() override;
+private:
+	StageSelect* stageselect;
 };

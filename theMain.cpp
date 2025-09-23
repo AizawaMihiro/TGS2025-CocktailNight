@@ -78,47 +78,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		SceneManager::Draw();
 
 
-		if (CheckHitKey(KEY_INPUT_P)) {
-			SceneManager::ChangeScene("PLAY");
-		}
-		if (CheckHitKey(KEY_INPUT_ESCAPE)) {
-			SceneManager::Exit();
-		}
-
-		if (newObjects.size() > 0) {
-			for (auto& obj : newObjects)
-			{
-				gameObjects.push_back(obj);
-			}
-			newObjects.clear();
-		}
-
-
-		for (auto& obj : gameObjects) {
-			if (obj->IsAlive())
-			{
-				obj->Update();
-			}
-		}
-		std::sort(gameObjects.begin(), gameObjects.end(),[](GameObject* a, GameObject* b) {
-				return a->GetPriority() < b->GetPriority();
-		});
-		for (auto& obj : gameObjects) {
-			if (obj->IsAlive())
-			{
-				obj->Draw();
-			}
-		}
-		for (auto it = gameObjects.begin(); it != gameObjects.end();) {
-			if (!(*it)->IsAlive())
-			{
-				delete* it;
-				it = gameObjects.erase(it);
-			}
-			else {
-				it++;
-			}
-		}
+		
+		
 		
 		ScreenFlip();
 		WaitTimer(16);

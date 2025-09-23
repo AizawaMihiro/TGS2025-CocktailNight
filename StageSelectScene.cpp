@@ -6,7 +6,9 @@
 StageSelectScene::StageSelectScene()
 {
 	
-	new StageSelect();
+	stageselect = new StageSelect;
+
+	AddGameObject(stageselect);
 }
 
 StageSelectScene::~StageSelectScene()
@@ -15,10 +17,11 @@ StageSelectScene::~StageSelectScene()
 
 void StageSelectScene::Update()
 {
+	stageselect->Update();
 }
 
 void StageSelectScene::Draw()
 {
-	
+	stageselect->Draw();
 
 }
