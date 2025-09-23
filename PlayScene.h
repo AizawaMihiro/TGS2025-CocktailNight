@@ -14,6 +14,6 @@ public:
 	void Draw() override;
 private:
 	Playarea* playarea;
-	Piece* piece;
+	
 
 };

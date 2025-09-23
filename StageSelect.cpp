@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include <assert.h>
+#include "StageData.h"
 
 StageSelect::StageSelect()
 {
@@ -43,7 +44,7 @@ void StageSelect::Update()
 		{
 			clickstage = 5;
 		}
-		else if (mouseX >= WIN_WIDTH && mouseX < WIN_WIDTH / 2 && mouseY >= WIN_HEIGHT / 2 && mouseY < WIN_HEIGHT)
+		else if (mouseX >= WIN_WIDTH / 4 && mouseX < WIN_WIDTH / 2 && mouseY >= WIN_HEIGHT / 2 && mouseY < WIN_HEIGHT)
 		{
 			clickstage = 6;
 		}
@@ -61,6 +62,7 @@ void StageSelect::Update()
 	switch (clickstage)
 	{
 	case 1:
+		StageData::stagenum = clickstage;
 		SceneManager::ChangeScene("PLAY");
 		isAlive_ = false;
 

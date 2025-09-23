@@ -2,9 +2,9 @@
 #include "DxLib.h"
 #include "Input.h"
 
-Playarea::Playarea():
+Playarea::Playarea(int stagenum):
 	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
-	selected_(-1,-1),preSelect_(-1),isHold_(false),isPush_(false)
+	selected_(-1,-1),preSelect_(-1),isHold_(false),isPush_(false), stagenum_(stagenum)
 {
 	hImage_ = LoadGraph("image/BG_bar.jpg");
 	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)

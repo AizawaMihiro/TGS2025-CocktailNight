@@ -2,10 +2,12 @@
 #include <DxLib.h>
 #include "Playarea.h"
 #include <algorithm>
+#include "StageData.h"
 
 PlayScene::PlayScene()
 {
-	Playarea* playarea = new Playarea();
+	int stage = StageData::stagenum;
+	playarea = new Playarea();
 	AddGameObject(playarea);
 }
 
