@@ -39,9 +39,9 @@ Piece::Piece(Rect pos, int type) :
 	case 6:
 		hImage_ = LoadGraph("image/piece/Piece7.png", 1);
 		break;
-	/*case 7:
+	case 7:
 		hImage_ = LoadGraph("image/piece/Piece8.png", 1);
-		break;*/
+		break;
 	default:
 		break;
 	}

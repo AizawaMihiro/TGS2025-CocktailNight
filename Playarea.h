@@ -26,5 +26,8 @@ public:
 	void SwapPosPiece(int a, int b);
 	void CheckPieceChaind(int a, int b);
 	void DeleteChaindPiece();
+	bool IsSolvable(); // ‡–@è‚ª‚ ‚é‚©
+	bool WouldMatch(int a, int b); // ŒğŠ·‚µ‚½‚ç˜A½‚·‚é‚©
+	void GenerateRandomBoard(int maxType);
 };
 

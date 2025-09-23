@@ -22,7 +22,7 @@ void StageSelect::Update()
 	GetMousePoint(&mouseX, &mouseY);
 	int clickstage = -1;
 
-	if (Input::IsMouseDown)
+	if (Input::IsButtonDown(MOUSE_INPUT_LEFT))
 	{
 		if (mouseX >= 0 && mouseX < WIN_WIDTH / 4 && mouseY >= 0 && mouseY < WIN_HEIGHT / 2)
 		{
