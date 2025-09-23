@@ -2,8 +2,13 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include <assert.h>
+
 StageSelect::StageSelect()
 {
+	
+	hImage = LoadGraph("\\image\\sake 1\\sake\\ƒVƒ“ƒfƒŒƒ‰.png");
+	
 }
 
 StageSelect::~StageSelect()
@@ -57,6 +62,8 @@ void StageSelect::Update()
 	{
 	case 1:
 		SceneManager::ChangeScene("PLAY");
+		isAlive_ = false;
+
 		break;
 	case 2:
 		break;
@@ -80,7 +87,7 @@ void StageSelect::Update()
 
 void StageSelect::Draw()
 {
-	DrawBox(0, 0, WIN_WIDTH / 4, WIN_HEIGHT / 2, GetColor(255, 0, 0), TRUE);
+	DrawRectGraph(0, 0, WIN_WIDTH / 4, WIN_HEIGHT / 2, WIN_WIDTH / 4, WIN_HEIGHT / 2, hImage, TRUE);
 	DrawBox(WIN_WIDTH / 4, 0, WIN_WIDTH / 2, WIN_HEIGHT / 2, GetColor(0, 255, 0), TRUE);
 	DrawBox(WIN_WIDTH / 2, 0, WIN_WIDTH / 4 * 3, WIN_HEIGHT / 2, GetColor(0, 0, 255), TRUE);
 	DrawBox(WIN_WIDTH / 4 * 3, 0, WIN_WIDTH, WIN_HEIGHT / 2, GetColor(255, 255, 0), TRUE);

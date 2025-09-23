@@ -15,6 +15,9 @@ public:
 	SceneBase() {}
 	virtual ~SceneBase() {}
 
-	virtual void Update() {}
+	virtual void Update() 
+	{
+
+	}
 	virtual void Draw() {}
 };

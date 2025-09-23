@@ -13,5 +13,7 @@ public:
 	~StageSelect();
 	void Update() override;
 	void Draw() override;
+private:
+	int hImage = -1;
 
 };

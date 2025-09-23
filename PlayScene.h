@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SceneBase.h"
+#include "Playarea.h"
+#include "Piece.h"
 
 class PlayScene
 	: public SceneBase
@@ -10,4 +12,8 @@ public:
 	~PlayScene();
 	void Update() override;
 	void Draw() override;
+private:
+	Playarea* playarea;
+	Piece* piece;
+
 };
