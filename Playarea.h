@@ -17,9 +17,9 @@ private:
 	int playBGM_;	//iPlayScene‚ÉˆÚ“®—\’èj
 	int pieceSelectSound_;
 	int pieceSwapSound_;
+	int stagenum_;
 public:
-    Playarea();
-	Playarea(int stagenum);
+    Playarea(int stagenum);
     ~Playarea();
     void Update() override;
 	void Draw() override;

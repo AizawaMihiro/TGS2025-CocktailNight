@@ -2,6 +2,9 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include <assert.h>
+#include "StageData.h"
+
 StageSelect::StageSelect()
 {
 	hImage_ = LoadGraph("image/Title_bg.jpg", 1);
@@ -41,6 +44,10 @@ StageSelect::StageSelect()
 	SetPriority(0);
 	AddGameObject(this);
 }
+	
+	hImage = LoadGraph("\\image\\sake 1\\sake\\ƒVƒ“ƒfƒŒƒ‰.png");
+	
+}
 
 StageSelect::~StageSelect()
 {
@@ -67,7 +74,10 @@ void StageSelect::Update()
 	switch (clickstage)
 	{
 	case 1:
+		StageData::stagenum = clickstage;
 		SceneManager::ChangeScene("PLAY");
+		isAlive_ = false;
+
 		break;
 	case 2:
 		break;

@@ -2,10 +2,12 @@
 #include <DxLib.h>
 #include "Playarea.h"
 #include <algorithm>
+#include "StageData.h"
 
 PlayScene::PlayScene()
 {
-	Playarea* playarea = new Playarea(1);
+	int stage = StageData::stagenum;
+	playarea = new Playarea();
 	AddGameObject(playarea);
 }
 
@@ -37,9 +39,10 @@ void PlayScene::Update()
 			obj->Update();
 		}
 	}
-	std::sort(gameObjects.begin(), gameObjects.end(), [](GameObject* a, GameObject* b) {
+	std::sort(gameObjects.begin(), gameObjects.end(), [](GameObject* a, GameObject* b) 
+	{
 		return a->GetPriority() < b->GetPriority();
-		});
+	});
 	for (auto& obj : gameObjects) {
 		if (obj->IsAlive())
 		{

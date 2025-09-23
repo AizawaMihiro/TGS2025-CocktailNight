@@ -149,6 +149,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="StageData.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="theMain.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="StageData.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="TitleScene.h" />
