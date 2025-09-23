@@ -19,11 +19,15 @@ private:
 	int pieceSwapSound_;
 public:
     Playarea();
+	Playarea(int stagenum);
     ~Playarea();
     void Update() override;
 	void Draw() override;
 	void SwapPosPiece(int a, int b);
 	void CheckPieceChaind(int a, int b);
 	void DeleteChaindPiece();
+	bool IsSolvable(); // ‡–@è‚ª‚ ‚é‚©
+	bool WouldMatch(int a, int b); // ŒğŠ·‚µ‚½‚ç˜A½‚·‚é‚©
+	void GenerateRandomBoard(int maxType);
 };
 

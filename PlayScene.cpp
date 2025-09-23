@@ -5,7 +5,7 @@
 
 PlayScene::PlayScene()
 {
-	Playarea* playarea = new Playarea();
+	Playarea* playarea = new Playarea(1);
 	AddGameObject(playarea);
 }
 
@@ -37,7 +37,9 @@ void PlayScene::Update()
 			obj->Update();
 		}
 	}
-	std::sort(gameObjects.begin(), gameObjects.end());
+	std::sort(gameObjects.begin(), gameObjects.end(), [](GameObject* a, GameObject* b) {
+		return a->GetPriority() < b->GetPriority();
+		});
 	for (auto& obj : gameObjects) {
 		if (obj->IsAlive())
 		{
