@@ -4,8 +4,10 @@
 
 Playarea::Playarea(int stagenum):
 	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
-	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false), stagenum_(stagenum)
+	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false)
 {
+	stagenum_ = stagenum;
+	score_ = 0;
 	csv_ = CsvReader("data/カクテルデータ.csv");
 	maxType_ = csv_.GetInt(stagenum, 6);
 	hImage_ = LoadGraph("image/BG_bar.jpg");
@@ -71,6 +73,9 @@ void Playarea::Update()
 				{
 					if (SwapAndCheckChain(preSelect_, selectNum)) {
 						ProcessMatchesAndDrop(); // チェーン＆落下処理を開始
+
+						//if (score_ >= 2000)
+						
 					}
 
 					isPush_ = false;
@@ -101,6 +106,7 @@ void Playarea::Draw()
 		DrawBox(areaRect_.x, areaRect_.y, areaRect_.x + areaRect_.w, areaRect_.y + areaRect_.h, GetColor(255, 255, 255), false, 3);
 
 	}
+	DrawFormatString(100,100,GetColor(255,255,255),"score_: %d",score_);
 }
 
 void Playarea::SwapPosPiece(int a, int b)
@@ -330,15 +336,20 @@ void Playarea::DropPieces(int maxType) {
 
 
 void Playarea::ProcessMatchesAndDrop() {
+	int delCount = 0;
 	while (true) {
 		ClearChainFlags();
 
 		bool chainOccurred = false;
 
+		delCount++;
 		// チェーン確認（Swapなし、ただのチェック）
 		chainOccurred = CheckAndMarkChains();
 
 		if (!chainOccurred) break;
+
+		const int piecePoint = 100;
+		score_ += piecePoint * delCount;
 
 		DeleteChaindPiece(); // チェーンしたピースを非表示にする
 		DropPieces(maxType_); // 落下して空きに詰める

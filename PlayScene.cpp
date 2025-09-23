@@ -17,8 +17,11 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
-	if (CheckHitKey(KEY_INPUT_P)) {
-		SceneManager::ChangeScene("TITLE");
+	if (CheckHitKey(KEY_INPUT_C)) {
+		SceneManager::ChangeScene("CLEAR");
+	}
+	if (CheckHitKey(KEY_INPUT_O)) {
+		SceneManager::ChangeScene("GAMEOVER");
 	}
 	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
 		SceneManager::Exit();

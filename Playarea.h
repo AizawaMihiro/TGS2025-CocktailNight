@@ -18,9 +18,10 @@ private:
 	int playBGM_;	//（PlaySceneに移動予定）
 	int pieceSelectSound_;
 	int pieceSwapSound_;
-	int stagenum_;
+
 	CsvReader csv_;
 	int maxType_;
+	int score;
 public:
     Playarea(int stagenum);
     ~Playarea();
@@ -37,5 +38,6 @@ public:
 	void ClearChainFlags();// チェーンフラグをクリア
 	bool SwapAndCheckChain(int a, int b);// 交換してチェーン確認
 	bool CheckAndMarkChains();// チェーン確認とフラグ設定
+	void SetScore();
 };
 

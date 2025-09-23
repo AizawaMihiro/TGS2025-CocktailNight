@@ -5,6 +5,8 @@ class GameObject
 protected:
 	bool isAlive_;//生存フラグ
 	int drawPriority_;//描画優先度
+	int stagenum_;   // ステージ番号
+	int score_;      // スコア
 public:
 	GameObject();
 	virtual ~GameObject();
@@ -14,6 +16,14 @@ public:
 	void SetAlive(bool alive) { isAlive_ = alive; }//生存フラグの設定
 	void SetPriority(int num) { drawPriority_ = num; }//描画優先度の設定
 	int GetPriority() const{ return drawPriority_; }//描画優先度の取得
+
+	// スコアのセッター / ゲッター
+	void setScore(int score) { score_ = score; }
+	int getScore() const { return score_; }
+
+	// ステージ番号のセッター / ゲッター
+	void setStageNum(int stage) { stagenum_ = stage; }
+	int getStageNum() const { return stagenum_; }
 };
 
 extern std::vector<GameObject*> gameObjects;//externはどこかでこの変数が存在することを表す
