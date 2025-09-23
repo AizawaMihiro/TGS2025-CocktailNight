@@ -5,32 +5,7 @@
 
 Playarea::Playarea(int stagenum):
 	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
-	selected_(-1,-1),preSelect_(-1),isHold_(false),isPush_(false), stagenum_(stagenum)
-{
-	hImage_ = LoadGraph("image/BG_bar.jpg");
-	// 盤面の初期化
-	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)
-	{
-		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
-		{
-			float x = j * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
-			float y = i * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
-			pieces_[i][j] = new Piece({ x, y, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }, (i * PLAYAREA_GRID_NUM_X + j) % 7);
-		}
-	}
-	playBGM_ = LoadSoundMem("sound/Tenacity.mp3");
-	pieceSelectSound_ = LoadSoundMem("sound/se/炊飯器のふたを閉める.mp3");
-	pieceSwapSound_ = LoadSoundMem("sound/se/ニュッ1.mp3");
-	ChangeVolumeSoundMem(255 * 0.5, playBGM_);//BGMの音量を調整
-	PlaySoundMem(playBGM_, DX_PLAYTYPE_LOOP);
-	SetAlive(true);
-	SetPriority(10);
-	AddGameObject(this);
-}
-
-Playarea::Playarea(int stagenum):
-	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
-	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false)
+	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false), stagenum_(stagenum)
 {
 	CsvReader csv("data/カクテルデータ.csv");
 	int maxType = csv.GetInt(stagenum, 6);

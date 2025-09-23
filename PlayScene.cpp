@@ -7,7 +7,7 @@
 PlayScene::PlayScene()
 {
 	int stage = StageData::stagenum;
-	playarea = new Playarea();
+	playarea = new Playarea(stage);
 	AddGameObject(playarea);
 }
 

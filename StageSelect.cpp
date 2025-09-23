@@ -7,7 +7,7 @@
 
 StageSelect::StageSelect()
 {
-	hImage_ = LoadGraph("image/Title_bg.jpg", 1);
+	hImage = LoadGraph("\\image\\sake 1\\sake\\シンデレラ.png");
 	for (int i = 0; i < SELECTABLE_STAGE_NUM; i++)
 	{
 		switch (i)
@@ -43,10 +43,6 @@ StageSelect::StageSelect()
 	SetAlive(true);
 	SetPriority(0);
 	AddGameObject(this);
-}
-	
-	hImage = LoadGraph("\\image\\sake 1\\sake\\シンデレラ.png");
-	
 }
 
 StageSelect::~StageSelect()
