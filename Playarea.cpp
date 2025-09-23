@@ -70,7 +70,6 @@ void Playarea::Update()
 			{
 				if (preSelect_ != selectNum)
 				{
-					PlaySoundMem(pieceSwapSound_, DX_PLAYTYPE_BACK);
 					CheckPieceChaind(preSelect_, selectNum);
 					isPush_ = false;
 				}
@@ -125,154 +124,86 @@ void Playarea::SwapPosPiece(int a, int b)
 	}
 }
 
-void Playarea::CheckPieceChaind(int a, int b)//チェーンの確認と消去
+void Playarea::CheckPieceChaind(int a, int b) // チェーンの確認と消去
 {
-	//次やること：特殊ボムの確認
-	
 	bool chainFlag = false;
 
-	SwapPosPiece(a,b);
+	// 一旦ピースを入れ替え
+	SwapPosPiece(a, b);
 
-	//垂直方向の確認
-	for (int i = 0; i < PLAYAREA_GRID_NUM_X; i++)
-	{
-		for (int j = 0; j < PLAYAREA_GRID_NUM_Y; j++)
-		{
-			Piece* tPiece = pieces_[j][i];
-			int tType = tPiece->GetType();
-			if (j - 1 > 0 && j + 1 < PLAYAREA_GRID_NUM_Y)//中間部
-			{
-				if (tType == pieces_[j+1][i]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(1);
-				}
-				if (tType == pieces_[j-1][i]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(pieces_[j - 1][i]->GetChainCounter() + 1);
-				}
-				if (tType != pieces_[j + 1][i]->GetType())//一個下が不一致（チェーンしない）
-				{
-					if (tPiece->GetChainCounter() == 2)//二個の場合のみ現在位置と一個上のフラグを解除
-					{
-						tPiece->SetChainFlag(false);
-						pieces_[j - 1][i]->SetChainFlag(false);
-						tPiece->SetChainCounter(0);
-						pieces_[j - 1][i]->SetChainCounter(0);
+	// 縦方向のチェーン確認
+	for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
+		int chainCount = 1;
+		int prevType = pieces_[0][x]->GetType();
+
+		for (int y = 1; y < PLAYAREA_GRID_NUM_Y; y++) {
+			int currentType = pieces_[y][x]->GetType();
+
+			if (currentType == prevType) {
+				chainCount++;
+			}
+			else {
+				if (chainCount >= 3) {
+					for (int k = 0; k < chainCount; k++) {
+						pieces_[y - 1 - k][x]->SetVerticalChainFlag(true);
 					}
+					chainFlag = true;
 				}
-			}
-			else if (j + 1 < PLAYAREA_GRID_NUM_Y)//最上部
-			{
-				if (tType == pieces_[j + 1][i]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(1);
-				}
-			}
-			else
-			{
-				if (tType == pieces_[j - 1][i]->GetType())//最下部
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(pieces_[j - 1][i]->GetChainCounter() + 1);
-				}
-				if (tPiece->GetChainCounter() <= 2)
-				{
-					tPiece->SetChainFlag(false);
-					tPiece->SetChainCounter(0);
-				}
+				chainCount = 1;
+				prevType = currentType;
 			}
 		}
 
-		for (int j = 0; j < PLAYAREA_GRID_NUM_Y; j++)
-		{
-			Piece* tPiece = pieces_[j][i];
-			if (tPiece->GetChainFlag())
-			{
-				tPiece->SetChainFlag(false);
-				tPiece->SetVerticalChainFlag(true);
-				chainFlag = true;
+		// 最後のチェーンチェック
+		if (chainCount >= 3) {
+			for (int k = 0; k < chainCount; k++) {
+				pieces_[PLAYAREA_GRID_NUM_Y - 1 - k][x]->SetVerticalChainFlag(true);
 			}
+			chainFlag = true;
 		}
 	}
 
-	//水平方向の確認
-	for (int i = 0; i < PLAYAREA_GRID_NUM_Y; i++)
-	{
-		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
-		{
-			Piece* tPiece = pieces_[i][j];
-			int tType = tPiece->GetType();
-			if (j - 1 > 0 && j + 1 < PLAYAREA_GRID_NUM_X)//中間部
-			{
-				if (tType == pieces_[i][j + 1]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(1);
-				}
-				if (tType == pieces_[i][j - 1]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(pieces_[i][j - 1]->GetChainCounter() + 1);
-				}
-				if (tType != pieces_[i][j + 1]->GetType())//一個右が不一致（チェーンしない）
-				{
-					if (tPiece->GetChainCounter() == 2)//二個の場合のみ現在位置と一個左のフラグを解除
-					{
-						tPiece->SetChainFlag(false);
-						pieces_[i][j - 1]->SetChainFlag(false);
-						tPiece->SetChainCounter(0);
-						pieces_[i][j - 1]->SetChainCounter(0);
+	// 横方向のチェーン確認
+	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
+		int chainCount = 1;
+		int prevType = pieces_[y][0]->GetType();
+
+		for (int x = 1; x < PLAYAREA_GRID_NUM_X; x++) {
+			int currentType = pieces_[y][x]->GetType();
+
+			if (currentType == prevType) {
+				chainCount++;
+			}
+			else {
+				if (chainCount >= 3) {
+					for (int k = 0; k < chainCount; k++) {
+						pieces_[y][x - 1 - k]->SetHorizontalChainFlag(true);
 					}
+					chainFlag = true;
 				}
-			}
-			else if (j + 1 < PLAYAREA_GRID_NUM_X)//最左部
-			{
-				if (tType == pieces_[i][j + 1]->GetType())
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(1);
-				}
-			}
-			else
-			{
-				if (tType == pieces_[i][j - 1]->GetType())//最右部
-				{
-					tPiece->SetChainFlag(true);
-					tPiece->SetChainCounter(pieces_[i][j - 1]->GetChainCounter() + 1);
-				}
-				if (tPiece->GetChainCounter() <= 2)
-				{
-					tPiece->SetChainFlag(false);
-					tPiece->SetChainCounter(0);
-				}
+				chainCount = 1;
+				prevType = currentType;
 			}
 		}
-		for (int j = 0; j < PLAYAREA_GRID_NUM_X; j++)
-		{
-			Piece* tPiece = pieces_[i][j];
-			if (tPiece->GetChainFlag())
-			{
-				tPiece->SetChainFlag(false);
-				tPiece->SetHorizontalChainFlag(true);
-				chainFlag = true;
+
+		// 最後のチェーンチェック
+		if (chainCount >= 3) {
+			for (int k = 0; k < chainCount; k++) {
+				pieces_[y][PLAYAREA_GRID_NUM_X - 1 - k]->SetHorizontalChainFlag(true);
 			}
+			chainFlag = true;
 		}
 	}
 
-	//特殊ボムの確認(保留)
-
-	if (chainFlag)
-	{
-		DeleteChaindPiece();//消去処理
+	// 消去処理または元に戻す
+	if (chainFlag) {
+		DeleteChaindPiece(); // チェーンしたピースを消す
 	}
-	else
-	{
-		SwapPosPiece(a, b);//チェーンしなかったら元に戻す
+	else {
+		SwapPosPiece(a, b); // チェーンしなかったので元に戻す
 	}
 }
+
 
 void Playarea::DeleteChaindPiece()
 {
