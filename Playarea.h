@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "globals.h"
 #include "Piece.h"
+#include "CsvReader.h"
 class Playarea :
     public GameObject
 {
@@ -18,16 +19,23 @@ private:
 	int pieceSelectSound_;
 	int pieceSwapSound_;
 	int stagenum_;
+	CsvReader csv_;
+	int maxType_;
 public:
     Playarea(int stagenum);
     ~Playarea();
     void Update() override;
 	void Draw() override;
 	void SwapPosPiece(int a, int b);
-	void CheckPieceChaind(int a, int b);
+	//void CheckPieceChaind(int a, int b);
 	void DeleteChaindPiece();
 	bool IsSolvable(); // 合法手があるか
 	bool WouldMatch(int a, int b); // 交換したら連鎖するか
-	void GenerateRandomBoard(int maxType);
+	void GenerateRandomBoard(int maxType);// ランダムに盤面を生成
+	void DropPieces(int maxType);// 落下処理
+	void ProcessMatchesAndDrop();// チェーン確認と落下処理のループ
+	void ClearChainFlags();// チェーンフラグをクリア
+	bool SwapAndCheckChain(int a, int b);// 交換してチェーン確認
+	bool CheckAndMarkChains();// チェーン確認とフラグ設定
 };
 

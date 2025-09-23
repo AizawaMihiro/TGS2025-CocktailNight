@@ -10,6 +10,7 @@ class CsvReader
 	std::vector<LINEREC> csvData;
 
 public:
+	CsvReader() {};
 	/// <summary>
 	/// このクラスは、コンストラクタでファイルを読み、
 	/// CSVファイルを読んで、値を保持します。

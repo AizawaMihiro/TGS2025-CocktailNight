@@ -1,18 +1,17 @@
 #include "Playarea.h"
 #include "DxLib.h"
 #include "Input.h"
-#include "CsvReader.h"
 
 Playarea::Playarea(int stagenum):
 	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
 	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false), stagenum_(stagenum)
 {
-	CsvReader csv("data/カクテルデータ.csv");
-	int maxType = csv.GetInt(stagenum, 6);
+	csv_ = CsvReader("data/カクテルデータ.csv");
+	maxType_ = csv_.GetInt(stagenum, 6);
 	hImage_ = LoadGraph("image/BG_bar.jpg");
 	// 盤面の初期化
 	do {
-		GenerateRandomBoard(maxType);// ランダムにピースを配置
+		GenerateRandomBoard(maxType_);// ランダムにピースを配置
 	} while (!IsSolvable()); // 合法手がないならやり直し
 	
 	//BGMとSEの読み込み
@@ -70,7 +69,10 @@ void Playarea::Update()
 			{
 				if (preSelect_ != selectNum)
 				{
-					CheckPieceChaind(preSelect_, selectNum);
+					if (SwapAndCheckChain(preSelect_, selectNum)) {
+						ProcessMatchesAndDrop(); // チェーン＆落下処理を開始
+					}
+
 					isPush_ = false;
 				}
 			}
@@ -124,85 +126,85 @@ void Playarea::SwapPosPiece(int a, int b)
 	}
 }
 
-void Playarea::CheckPieceChaind(int a, int b) // チェーンの確認と消去
-{
-	bool chainFlag = false;
-
-	// 一旦ピースを入れ替え
-	SwapPosPiece(a, b);
-
-	// 縦方向のチェーン確認
-	for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
-		int chainCount = 1;
-		int prevType = pieces_[0][x]->GetType();
-
-		for (int y = 1; y < PLAYAREA_GRID_NUM_Y; y++) {
-			int currentType = pieces_[y][x]->GetType();
-
-			if (currentType == prevType) {
-				chainCount++;
-			}
-			else {
-				if (chainCount >= 3) {
-					for (int k = 0; k < chainCount; k++) {
-						pieces_[y - 1 - k][x]->SetVerticalChainFlag(true);
-					}
-					chainFlag = true;
-				}
-				chainCount = 1;
-				prevType = currentType;
-			}
-		}
-
-		// 最後のチェーンチェック
-		if (chainCount >= 3) {
-			for (int k = 0; k < chainCount; k++) {
-				pieces_[PLAYAREA_GRID_NUM_Y - 1 - k][x]->SetVerticalChainFlag(true);
-			}
-			chainFlag = true;
-		}
-	}
-
-	// 横方向のチェーン確認
-	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
-		int chainCount = 1;
-		int prevType = pieces_[y][0]->GetType();
-
-		for (int x = 1; x < PLAYAREA_GRID_NUM_X; x++) {
-			int currentType = pieces_[y][x]->GetType();
-
-			if (currentType == prevType) {
-				chainCount++;
-			}
-			else {
-				if (chainCount >= 3) {
-					for (int k = 0; k < chainCount; k++) {
-						pieces_[y][x - 1 - k]->SetHorizontalChainFlag(true);
-					}
-					chainFlag = true;
-				}
-				chainCount = 1;
-				prevType = currentType;
-			}
-		}
-
-		// 最後のチェーンチェック
-		if (chainCount >= 3) {
-			for (int k = 0; k < chainCount; k++) {
-				pieces_[y][PLAYAREA_GRID_NUM_X - 1 - k]->SetHorizontalChainFlag(true);
-			}
-			chainFlag = true;
-		}
-	}
-
-	// 消去処理または元に戻す
-	if (chainFlag) {
-		DeleteChaindPiece(); // チェーンしたピースを消す
-	}
-	else {
-		SwapPosPiece(a, b); // チェーンしなかったので元に戻す
-	}
-}
+//void Playarea::CheckPieceChaind(int a, int b) // チェーンの確認と消去
+//{
+//	bool chainFlag = false;
+//
+//	// 一旦ピースを入れ替え
+//	SwapPosPiece(a, b);
+//
+//	// 縦方向のチェーン確認
+//	for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
+//		int chainCount = 1;
+//		int prevType = pieces_[0][x]->GetType();
+//
+//		for (int y = 1; y < PLAYAREA_GRID_NUM_Y; y++) {
+//			int currentType = pieces_[y][x]->GetType();
+//
+//			if (currentType == prevType) {
+//				chainCount++;
+//			}
+//			else {
+//				if (chainCount >= 3) {
+//					for (int k = 0; k < chainCount; k++) {
+//						pieces_[y - 1 - k][x]->SetVerticalChainFlag(true);
+//					}
+//					chainFlag = true;
+//				}
+//				chainCount = 1;
+//				prevType = currentType;
+//			}
+//		}
+//
+//		// 最後のチェーンチェック
+//		if (chainCount >= 3) {
+//			for (int k = 0; k < chainCount; k++) {
+//				pieces_[PLAYAREA_GRID_NUM_Y - 1 - k][x]->SetVerticalChainFlag(true);
+//			}
+//			chainFlag = true;
+//		}
+//	}
+//
+//	// 横方向のチェーン確認
+//	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
+//		int chainCount = 1;
+//		int prevType = pieces_[y][0]->GetType();
+//
+//		for (int x = 1; x < PLAYAREA_GRID_NUM_X; x++) {
+//			int currentType = pieces_[y][x]->GetType();
+//
+//			if (currentType == prevType) {
+//				chainCount++;
+//			}
+//			else {
+//				if (chainCount >= 3) {
+//					for (int k = 0; k < chainCount; k++) {
+//						pieces_[y][x - 1 - k]->SetHorizontalChainFlag(true);
+//					}
+//					chainFlag = true;
+//				}
+//				chainCount = 1;
+//				prevType = currentType;
+//			}
+//		}
+//
+//		// 最後のチェーンチェック
+//		if (chainCount >= 3) {
+//			for (int k = 0; k < chainCount; k++) {
+//				pieces_[y][PLAYAREA_GRID_NUM_X - 1 - k]->SetHorizontalChainFlag(true);
+//			}
+//			chainFlag = true;
+//		}
+//	}
+//
+//	// 消去処理または元に戻す
+//	if (chainFlag) {
+//		DeleteChaindPiece(); // チェーンしたピースを消す
+//	}
+//	else {
+//		SwapPosPiece(a, b); // チェーンしなかったので元に戻す
+//	}
+//}
 
 
 void Playarea::DeleteChaindPiece()
@@ -289,4 +291,147 @@ void Playarea::GenerateRandomBoard(int maxType) {
 			pieces_[y][x] = new Piece(Rect{ posx, posy, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }, newType);
 		}
 	}
+}
+
+void Playarea::DropPieces(int maxType) {
+	for (int x = 0; x < PLAYAREA_GRID_NUM_X; ++x) {
+		for (int y = PLAYAREA_GRID_NUM_Y - 1; y >= 0; --y) {
+			if (!pieces_[y][x]->IsAlive()) {
+				int above = y - 1;
+
+				while (above >= 0 && !pieces_[above][x]->IsAlive()) {
+					above--;
+				}
+
+				if (above >= 0) {
+					// ピースポインタを入れ替える
+					std::swap(pieces_[y][x], pieces_[above][x]);
+
+					// 表示位置も入れ替える必要あり
+					Rect tmp = pieces_[y][x]->GetPos();
+					pieces_[y][x]->SetPos(pieces_[above][x]->GetPos());
+					pieces_[above][x]->SetPos(tmp);
+				}
+				else {
+					// 新しいピースを生成
+					if (pieces_[y][x] != nullptr) {
+						delete pieces_[y][x];
+					}
+
+					int newType = rand() % maxType;
+					float posx = x * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
+					float posy = y * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
+					pieces_[y][x] = new Piece(Rect{ posx, posy, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }, newType);
+				}
+			}
+		}
+	}
+}
+
+
+void Playarea::ProcessMatchesAndDrop() {
+	while (true) {
+		ClearChainFlags();
+
+		bool chainOccurred = false;
+
+		// チェーン確認（Swapなし、ただのチェック）
+		chainOccurred = CheckAndMarkChains();
+
+		if (!chainOccurred) break;
+
+		DeleteChaindPiece(); // チェーンしたピースを非表示にする
+		DropPieces(maxType_); // 落下して空きに詰める
+	}
+}
+
+void Playarea::ClearChainFlags() {
+	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; ++y) {
+		for (int x = 0; x < PLAYAREA_GRID_NUM_X; ++x) {
+			pieces_[y][x]->SetVerticalChainFlag(false);
+			pieces_[y][x]->SetHorizontalChainFlag(false);
+		}
+	}
+}
+
+bool Playarea::SwapAndCheckChain(int a, int b) {
+	SwapPosPiece(a, b);
+
+	if (CheckAndMarkChains()) {
+		return true; // 連鎖開始
+	}
+
+	// 連鎖がなければ戻す
+	SwapPosPiece(a, b);
+	return false;
+}
+
+bool Playarea::CheckAndMarkChains() {
+	bool chainFlag = false;
+
+	// 縦方向のチェーン確認
+	for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
+		int chainCount = 1;
+		int prevType = pieces_[0][x]->GetType();
+
+		for (int y = 1; y < PLAYAREA_GRID_NUM_Y; y++) {
+			int currentType = pieces_[y][x]->GetType();
+
+			if (currentType == prevType) {
+				chainCount++;
+			}
+			else {
+				if (chainCount >= 3) {
+					for (int k = 0; k < chainCount; k++) {
+						pieces_[y - 1 - k][x]->SetVerticalChainFlag(true);
+					}
+					chainFlag = true;
+				}
+				chainCount = 1;
+				prevType = currentType;
+			}
+		}
+
+		// 最後のチェーンチェック
+		if (chainCount >= 3) {
+			for (int k = 0; k < chainCount; k++) {
+				pieces_[PLAYAREA_GRID_NUM_Y - 1 - k][x]->SetVerticalChainFlag(true);
+			}
+			chainFlag = true;
+		}
+	}
+
+	// 横方向のチェーン確認
+	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
+		int chainCount = 1;
+		int prevType = pieces_[y][0]->GetType();
+
+		for (int x = 1; x < PLAYAREA_GRID_NUM_X; x++) {
+			int currentType = pieces_[y][x]->GetType();
+
+			if (currentType == prevType) {
+				chainCount++;
+			}
+			else {
+				if (chainCount >= 3) {
+					for (int k = 0; k < chainCount; k++) {
+						pieces_[y][x - 1 - k]->SetHorizontalChainFlag(true);
+					}
+					chainFlag = true;
+				}
+				chainCount = 1;
+				prevType = currentType;
+			}
+		}
+
+		// 最後のチェーンチェック
+		if (chainCount >= 3) {
+			for (int k = 0; k < chainCount; k++) {
+				pieces_[y][PLAYAREA_GRID_NUM_X - 1 - k]->SetHorizontalChainFlag(true);
+			}
+			chainFlag = true;
+		}
+	}
+
+	return chainFlag;
 }
