@@ -100,7 +100,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				obj->Update();
 			}
 		}
-		std::sort(gameObjects.begin(), gameObjects.end());
+		std::sort(gameObjects.begin(), gameObjects.end(),[](GameObject* a, GameObject* b) {
+				return a->GetPriority() < b->GetPriority();
+		});
 		for (auto& obj : gameObjects) {
 			if (obj->IsAlive())
 			{

@@ -13,6 +13,7 @@ public:
 	bool IsAlive() { return isAlive_; }//生存フラグの取得
 	void SetAlive(bool alive) { isAlive_ = alive; }//生存フラグの設定
 	void SetPriority(int num) { drawPriority_ = num; }//描画優先度の設定
+	int GetPriority() const{ return drawPriority_; }//描画優先度の取得
 };
 
 extern std::vector<GameObject*> gameObjects;//externはどこかでこの変数が存在することを表す
