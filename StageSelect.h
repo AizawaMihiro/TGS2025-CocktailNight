@@ -7,6 +7,9 @@
 class StageSelect
 	: public GameObject
 {
+private:
+	int hImage_;
+	Rect stageRect_[SELECTABLE_STAGE_NUM];
 public:
 
 	StageSelect();

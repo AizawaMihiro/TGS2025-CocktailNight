@@ -33,7 +33,7 @@ Playarea::Playarea(int stagenum):
 	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false)
 {
 	CsvReader csv("data/カクテルデータ.csv");
-	int maxType = csv.GetInt(stagenum, csv.GetColumns(stagenum) - 1);
+	int maxType = csv.GetInt(stagenum, 6);
 	hImage_ = LoadGraph("image/BG_bar.jpg");
 	// 盤面の初期化
 	do {
