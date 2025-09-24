@@ -3,8 +3,8 @@
 #include "Input.h"
 
 Playarea::Playarea(int stagenum):
-	GameObject(), areaRect_(PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT),
-	selected_(-1, -1), preSelect_(-1), isHold_(false), isPush_(false)
+	GameObject(), areaRect_({ PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT }),
+	selected_({ -1, -1 }), preSelect_(-1), isHold_(false), isPush_(false)
 {
 	stagenum_ = stagenum;
 	score_ = 0;
