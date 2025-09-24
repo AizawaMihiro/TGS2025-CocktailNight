@@ -11,6 +11,7 @@ class TitleScene : public SceneBase
 private:
 	int hBGImage_;
 	int hTitleImage_;
+	int hStartButtonImage_;
 public:
 	TitleScene();
 	~TitleScene();
