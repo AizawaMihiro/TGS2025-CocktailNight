@@ -70,12 +70,16 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
-	DrawExtendGraph(0, 0, 1024, 768, hImage_, false);
-	DrawBox(100, 400, 400, 600, GetColor(255, 255, 255), TRUE);
-	DrawExtendGraph(100, 400, 400, 600, cocktailImagte_, true);
+	DrawExtendGraph(0, 0, 1024, 768, hImage_, true);
+	DrawBox(100, 100, 400, 300, GetColor(255, 255, 255), TRUE);
+	DrawExtendGraph(100, 100, 400, 300, cocktailImagte_, true);
 	
-	DrawFormatString(520, 100, GetColor(255, 255, 255), "説明： %s\n", infomation_.c_str());
-	DrawFormatString(520, 300, GetColor(255, 255, 255), "度数： %d\n", content_);
-	DrawFormatString(520, 500, GetColor(255, 255, 255), "カクテル言葉： %s\n", message_.c_str());
-	DrawString(520, 700, "Push [S]Key To StageSelect", GetColor(255, 255, 255));
+	SetFontSize(30);
+	DrawFormatString(500, 200, GetColor(255, 255, 255), "度数： %d\n", content_);
+	DrawFormatString(500, 300, GetColor(255, 255, 255), "カクテル言葉： %s\n", message_.c_str());
+
+	SetFontSize(18);
+	DrawFormatString(100, 520, GetColor(255, 255, 255), "説明： %s\n", infomation_.c_str());
+	SetFontSize(20);
+	DrawString(520, 700, "Left Click To StageSelect", GetColor(255, 255, 255));
 }

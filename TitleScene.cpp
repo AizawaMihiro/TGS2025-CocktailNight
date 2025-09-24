@@ -45,6 +45,6 @@ void TitleScene::Draw()
 	//DrawString(0, 0, "TITLE SCENE", GetColor(255,255,255));
 	DrawExtendGraph(0, 0, 1024, 768, hBGImage_, false);
 	DrawExtendGraph(50, 0, 500, 350, hTitleImage_, true);
-	DrawString(100, 400, "Push [P]Key To Play", GetColor(255, 255, 255));
+	//DrawString(100, 400, "Left Click", GetColor(255, 255, 255));
 	DrawExtendGraph(LEFT_TOP_X, LEFT_TOP_Y, RIGHT_X, RIGHT_Y, hStartButtonImage_, true);
 }
