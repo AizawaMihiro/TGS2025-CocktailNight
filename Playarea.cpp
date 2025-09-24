@@ -9,7 +9,7 @@ Playarea::Playarea(int stagenum):
 	stagenum_ = stagenum;
 	score_ = 0;
 	csv_ = CsvReader("data/カクテルデータ.csv");
-	maxType_ = csv_.GetInt(stagenum, 6);
+	maxType_ = csv_.GetInt(stagenum-1, 6);
 	hImage_ = LoadGraph("image/BG_bar.jpg");
 	// 盤面の初期化
 	do {
@@ -302,32 +302,28 @@ void Playarea::GenerateRandomBoard(int maxType) {
 void Playarea::DropPieces(int maxType) {
 	for (int x = 0; x < PLAYAREA_GRID_NUM_X; ++x) {
 		for (int y = PLAYAREA_GRID_NUM_Y - 1; y >= 0; --y) {
+			// ここでの pieces_[y][x] は non-null 前提（生成時に必ず埋める）
 			if (!pieces_[y][x]->IsAlive()) {
 				int above = y - 1;
-
 				while (above >= 0 && !pieces_[above][x]->IsAlive()) {
-					above--;
+					--above;
 				}
 
 				if (above >= 0) {
-					// ピースポインタを入れ替える
+					// 下に落とす（ポインタを入れ替え＆見た目の位置も入れ替え）
 					std::swap(pieces_[y][x], pieces_[above][x]);
-
-					// 表示位置も入れ替える必要あり
 					Rect tmp = pieces_[y][x]->GetPos();
 					pieces_[y][x]->SetPos(pieces_[above][x]->GetPos());
 					pieces_[above][x]->SetPos(tmp);
 				}
 				else {
-					// 新しいピースを生成
-					if (pieces_[y][x] != nullptr) {
-						delete pieces_[y][x];
-					}
-
+					// **deleteしない**：古い死体は gameObjects に残しておき、
+					// シーンの掃除ループに任せる
 					int newType = rand() % maxType;
 					float posx = x * PLAYAREA_GRID_WIDTH + PLAYAREA_MARGIN_LEFT;
 					float posy = y * PLAYAREA_GRID_HEIGHT + PLAYAREA_MARGIN_TOP;
 					pieces_[y][x] = new Piece(Rect{ posx, posy, PLAYAREA_GRID_WIDTH, PLAYAREA_GRID_HEIGHT }, newType);
+					// Piece の ctor が AddGameObject する仕様:contentReference[oaicite:3]{index=3}
 				}
 			}
 		}
