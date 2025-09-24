@@ -25,18 +25,25 @@ ClearScene::ClearScene()
 
 		break;
 	case 2:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/モヒート.png");
 		break;
 	case 3:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/ジントニック.png");
 		break;
 	case 4:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/スクリュードライバー.png");
 		break;
 	case 5:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/ブラッディマリー.png");
 		break;
 	case 6:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/テキーラサンライズ.png");
 		break;
 	case 7:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/青い珊瑚礁.png");
 		break;
 	case 8:
+		cocktailImagte_ = LoadGraph("image/sake 1/sake/マティーニ.png");
 		break;
 
 	default:
