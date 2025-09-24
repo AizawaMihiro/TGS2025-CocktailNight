@@ -22,6 +22,7 @@ private:
 	CsvReader csv_;
 	int maxType_;
 	int score;
+	int moveCount_ = 0; // è”
 public:
     Playarea(int stagenum);
     ~Playarea();

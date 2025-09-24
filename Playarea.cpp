@@ -12,6 +12,7 @@ Playarea::Playarea(int stagenum):
 	score_ = 0;
 	csv_ = CsvReader("data/カクテルデータ.csv");
 	maxType_ = csv_.GetInt(stagenum-1, 6);
+	moveCount_ = csv_.GetInt(stagenum - 1, 2);
 	hImage_ = LoadGraph("image/BG_bar.jpg");
 	// 盤面の初期化
 	do {
@@ -74,12 +75,18 @@ void Playarea::Update()
 				if (preSelect_ != selectNum)
 				{
 					if (SwapAndCheckChain(preSelect_, selectNum)) {
+						moveCount_--;
 						ProcessMatchesAndDrop(); // チェーン＆落下処理を開始
 
 						if (score_ >= csv_.GetInt(stagenum_-1,5)) {
 							// ステージクリア
 							PlaySoundMem(pieceSwapSound_, DX_PLAYTYPE_BACK);
 							SceneManager::ChangeScene("CLEAR");
+							isAlive_ = false;
+						}
+						if (moveCount_==0)
+						{
+							SceneManager::ChangeScene("GAMEOVER");
 							isAlive_ = false;
 						}
 						
@@ -114,6 +121,7 @@ void Playarea::Draw()
 
 	}
 	DrawFormatString(10,100,GetColor(255,255,255),"score_: %d / %d",score_,csv_.GetInt(stagenum_-1,5));
+	DrawFormatString(10, 200, GetColor(255, 255, 255), "lastmove: %d / %d", moveCount_, csv_.GetInt(stagenum_ - 1, 2));
 }
 
 void Playarea::SwapPosPiece(int a, int b)
