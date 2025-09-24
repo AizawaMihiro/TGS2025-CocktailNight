@@ -1,6 +1,8 @@
 #include "Playarea.h"
 #include "DxLib.h"
 #include "Input.h"
+#include "SceneManager.h"
+
 
 Playarea::Playarea(int stagenum):
 	GameObject(), areaRect_({ PLAYAREA_MARGIN_LEFT, PLAYAREA_MARGIN_TOP, PLAYAREA_WIDTH, PLAYAREA_HEIGHT }),
@@ -74,7 +76,12 @@ void Playarea::Update()
 					if (SwapAndCheckChain(preSelect_, selectNum)) {
 						ProcessMatchesAndDrop(); // チェーン＆落下処理を開始
 
-						//if (score_ >= 2000)
+						if (score_ >= csv_.GetInt(stagenum_-1,5)) {
+							// ステージクリア
+							PlaySoundMem(pieceSwapSound_, DX_PLAYTYPE_BACK);
+							SceneManager::ChangeScene("CLEAR");
+							isAlive_ = false;
+						}
 						
 					}
 
@@ -106,7 +113,7 @@ void Playarea::Draw()
 		DrawBox(areaRect_.x, areaRect_.y, areaRect_.x + areaRect_.w, areaRect_.y + areaRect_.h, GetColor(255, 255, 255), false, 3);
 
 	}
-	DrawFormatString(100,100,GetColor(255,255,255),"score_: %d",score_);
+	DrawFormatString(10,100,GetColor(255,255,255),"score_: %d / %d",score_,csv_.GetInt(stagenum_-1,5));
 }
 
 void Playarea::SwapPosPiece(int a, int b)
