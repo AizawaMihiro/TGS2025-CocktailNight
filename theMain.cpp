@@ -4,6 +4,7 @@
 #include "input.h"
 #include <vector>
 #include <algorithm>
+#include <ctime>
 #include "Playarea.h"
 #include "BootScene.h"
 
@@ -59,6 +60,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//Playarea* playarea = new Playarea(); // プレイエリアの初期化
 	BootScene* bootscene = new BootScene();
+
+	srand((unsigned int)time(NULL));
 
 	while (true)
 	{
