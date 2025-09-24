@@ -5,16 +5,16 @@
 namespace
 {
 	int LEFT_TOP_X = 312;
-	int LEFT_TOP_Y = 600;
+	int LEFT_TOP_Y = 400;
 	int RIGHT_X = 712;
-	int RIGHT_Y = 700;
+	int RIGHT_Y = 800;
 }
 
 TitleScene::TitleScene()
 {
 	hBGImage_ = LoadGraph("image/Title_bg.jpg");
 	hTitleImage_ = LoadGraph("image/ÉJÉNÉeÉãÉçÉS.png");
-
+	hStartButtonImage_ = LoadGraph("image/Start.png");
 }
 
 TitleScene::~TitleScene()
@@ -51,5 +51,5 @@ void TitleScene::Draw()
 	DrawExtendGraph(0, 0, 1024, 768, hBGImage_, false);
 	DrawExtendGraph(50, 0, 500, 350, hTitleImage_, true);
 	DrawString(100, 400, "Push [P]Key To Play", GetColor(255, 255, 255));
-	DrawBox(312, 600, 712, 700, GetColor(255, 255, 255), TRUE);
+	DrawExtendGraph(LEFT_TOP_X, LEFT_TOP_Y, RIGHT_X, RIGHT_Y, hStartButtonImage_, true);
 }
