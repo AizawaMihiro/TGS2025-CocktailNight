@@ -1,4 +1,5 @@
 #include "ClearScene.h"
+#include "StageData.h"
 #include <DxLib.h>
 
 ClearScene::ClearScene()
@@ -8,10 +9,10 @@ ClearScene::ClearScene()
 	hImage_ = LoadGraph("image/Title_bg.jpg");
 	cocktailImagte_ = -1;
 
-	int stagenum = 1;
-	content_ = csv_.GetInt(stagenum, 7);
-	infomation_ = csv_.GetString(stagenum, 8);
-	message_ = csv_.GetString(stagenum, 9);
+	int stagenum = StageData::stagenum;
+	content_ = csv_.GetInt(stagenum-1, 7);
+	infomation_ = csv_.GetString(stagenum-1, 8);
+	message_ = csv_.GetString(stagenum-1, 9);
 }
 
 ClearScene::~ClearScene()
