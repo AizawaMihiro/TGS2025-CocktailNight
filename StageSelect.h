@@ -8,15 +8,14 @@ class StageSelect
 	: public GameObject
 {
 private:
-	int hImage_;
+	int hBGImage_;
 	Rect stageRect_[SELECTABLE_STAGE_NUM];
+	int hNumImage_[SELECTABLE_STAGE_NUM];
+	int selectedStage_ = -1;
 public:
 
 	StageSelect();
 	~StageSelect();
 	void Update() override;
 	void Draw() override;
-private:
-	int hImage = -1;
-
 };
