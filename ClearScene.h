@@ -15,6 +15,7 @@ private:
 	int content_;
 	std::string message_;
 	int stagenum;
+	std::string name_;
 	
 public:
 	ClearScene();

@@ -6,7 +6,7 @@
 
 ClearScene::ClearScene()
 	:csv_("data/カクテルデータ.csv"),
-	infomation_("errer"), content_(0), message_("errer")
+	infomation_("errer"), content_(0), message_("errer"), name_("errer")
 {
 	hImage_ = LoadGraph("image/Title_bg.jpg");
 	cocktailImagte_ = -1;
@@ -17,6 +17,7 @@ ClearScene::ClearScene()
 	content_ = csv_.GetInt(stagenum-1, 7);
 	infomation_ = csv_.GetString(stagenum-1, 8);
 	message_ = csv_.GetString(stagenum-1, 9);
+	name_ = csv_.GetString(stagenum - 1, 1);
 
 	switch (stagenum)
 	{
@@ -78,10 +79,11 @@ void ClearScene::Update()
 void ClearScene::Draw()
 {
 	DrawExtendGraph(0, 0, 1024, 768, hImage_, true);
-	DrawBox(100, 100, 400, 300, GetColor(255, 255, 255), TRUE);
+	DrawBox(100, 100, 400, 300, GetColor(255, 255, 255), FALSE);
 	DrawExtendGraph(100, 100, 400, 300, cocktailImagte_, true);
 	
 	SetFontSize(30);
+	DrawFormatString(500, 100, GetColor(255, 255, 255), "名前 : %s\n", name_.c_str());
 	DrawFormatString(500, 200, GetColor(255, 255, 255), "度数： %d\n", content_);
 	DrawFormatString(500, 300, GetColor(255, 255, 255), "カクテル言葉： %s\n", message_.c_str());
 

@@ -47,4 +47,5 @@ void TitleScene::Draw()
 	DrawExtendGraph(50, 0, 500, 350, hTitleImage_, true);
 	//DrawString(100, 400, "Left Click", GetColor(255, 255, 255));
 	DrawExtendGraph(LEFT_TOP_X, LEFT_TOP_Y, RIGHT_X, RIGHT_Y, hStartButtonImage_, true);
+	DrawFormatString(800, 740, GetColor(255, 255, 255), "Å¶Ç®éÇÕ20çŒÇ…Ç»Ç¡ÇƒÇ©ÇÁ");
 }
