@@ -20,10 +20,22 @@ Playarea::Playarea(int stagenum):
 	} while (!IsSolvable()); // 合法手がないならやり直し
 	
 	//BGMとSEの読み込み
-	playBGM_ = LoadSoundMem("sound/ラスボス.mp3");
+	//ステージ番号に応じてBGMを変える
+	switch (stagenum_)
+	{
+	case 1:
+		playBGM_ = LoadSoundMem("sound/チュートリアル.mp3");
+		break;
+	case 8:
+		playBGM_ = LoadSoundMem("sound/ラスボス.mp3");
+		break;
+	default:
+		playBGM_ = LoadSoundMem("sound/メインステージ.mp3");
+		break;
+	}
 	pieceSelectSound_ = LoadSoundMem("sound/se/炊飯器のふたを閉める.mp3");
 	pieceSwapSound_ = LoadSoundMem("sound/se/ニュッ1.mp3");
-	ChangeVolumeSoundMem(255 * 0.5, playBGM_);//BGMの音量を調整
+	//ChangeVolumeSoundMem(255 * 0.5, playBGM_);//BGMの音量を調整
 	PlaySoundMem(playBGM_, DX_PLAYTYPE_LOOP);
 	SetAlive(true);
 	SetPriority(10);

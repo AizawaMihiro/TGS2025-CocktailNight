@@ -4,6 +4,8 @@
 
 GameoverScene::GameoverScene()
 {
+	hGameoverSound_ = LoadSoundMem("sound/se/ƒsƒ…[ƒ“‚Æ“¦‚°‚é.mp3");
+	PlaySoundMem(hGameoverSound_, DX_PLAYTYPE_BACK);
 }
 
 GameoverScene::~GameoverScene()

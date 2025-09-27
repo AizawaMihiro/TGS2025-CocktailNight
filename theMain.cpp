@@ -55,6 +55,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	DxInit();
 	SceneManager::Init();
 
+	//ChangeWindowMode(false);// フルスクリーンに変更
+	//SetMouseDispFlag(true);// マウスカーソルを表示する
+
 	crrTime = GetNowCount();
 	prevTime = GetNowCount();
 

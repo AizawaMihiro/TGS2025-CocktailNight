@@ -12,6 +12,7 @@ private:
 	int hBGImage_;
 	int hTitleImage_;
 	int hStartButtonImage_;
+	int hSelectSound_;
 public:
 	TitleScene();
 	~TitleScene();

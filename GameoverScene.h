@@ -5,6 +5,7 @@
 class GameoverScene : public SceneBase
 {
 private:
+	int hGameoverSound_;
 public:
 	GameoverScene();
 	~GameoverScene();

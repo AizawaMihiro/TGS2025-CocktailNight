@@ -8,6 +8,7 @@
 StageSelect::StageSelect()
 {
 	hBGImage_ = LoadGraph("image/Title_bg.jpg");
+	hSelectSound_ = LoadSoundMem("sound/se/Œˆ’èƒ{ƒ^ƒ“‚ð‰Ÿ‚·26.mp3");
 	for (int i = 0; i < SELECTABLE_STAGE_NUM; i++)
 	{
 		switch (i)
@@ -74,6 +75,7 @@ void StageSelect::Update()
 	if (selectedStage_ != -1)
 	{
 		StageData::stagenum = selectedStage_;
+		PlaySoundMem(hSelectSound_, DX_PLAYTYPE_BACK);
 		SceneManager::ChangeScene("PLAY");
 		isAlive_ = false;
 	}

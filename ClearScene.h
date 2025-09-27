@@ -8,6 +8,7 @@ class ClearScene : public SceneBase
 {
 private:
 	int hImage_;
+	int hClearSound_;
 	int cocktailImagte_;
 	CsvReader csv_;
 	int stagenum_;

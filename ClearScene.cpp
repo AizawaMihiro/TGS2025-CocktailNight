@@ -11,7 +11,8 @@ ClearScene::ClearScene()
 	hImage_ = LoadGraph("image/Title_bg.jpg");
 	cocktailImagte_ = -1;
 
-	
+	hClearSound_ = LoadSoundMem("sound/se/ラッパのファンファーレ.mp3");
+	PlaySoundMem(hClearSound_, DX_PLAYTYPE_BACK);
 
 	stagenum = StageData::stagenum;
 	content_ = csv_.GetInt(stagenum-1, 7);

@@ -15,6 +15,8 @@ TitleScene::TitleScene()
 	hBGImage_ = LoadGraph("image/Title_bg.jpg");
 	hTitleImage_ = LoadGraph("image/カクテルロゴ.png");
 	hStartButtonImage_ = LoadGraph("image/Start.png");
+
+	hSelectSound_ = LoadSoundMem("sound/se/ニュースタイトル表示3.mp3");
 }
 
 TitleScene::~TitleScene()
@@ -28,13 +30,11 @@ void TitleScene::Update()
 
 	if (Input::IsButtonDown(MOUSE_INPUT_LEFT))
 	{
-		
 		if (mouseX > LEFT_TOP_X && RIGHT_X > mouseX && mouseY > LEFT_TOP_Y && RIGHT_Y > mouseY)
 		{
+			PlaySoundMem(hSelectSound_, DX_PLAYTYPE_BACK);
 			SceneManager::ChangeScene("StageSelect");
 		}
-		
-
 	}
 	
 }
