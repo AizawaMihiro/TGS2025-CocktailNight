@@ -14,7 +14,7 @@ Piece::Piece():
 }
 
 Piece::Piece(Rect pos, int type) :
-	GameObject(), Pos_(pos), type_(type),chainCounter_(0)
+	GameObject(), Pos_(pos), type_(type), VerchainCounter_(0), HorchainCounter_(0)
 {
 	switch (type_)
 	{

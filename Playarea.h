@@ -39,6 +39,7 @@ public:
 	void ClearChainFlags();// チェーンフラグをクリア
 	bool SwapAndCheckChain(int a, int b);// 交換してチェーン確認
 	bool CheckAndMarkChains();// チェーン確認とフラグ設定
+	int CountOfChain();// チェーンしているピースの数を数える
 	void SetScore();
 };
 

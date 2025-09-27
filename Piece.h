@@ -11,7 +11,8 @@ class Piece :
 	bool isSelected_;	//選択されたか
 	bool isDrawable_;	//描画されるか
 	bool isChain_;		//連鎖確認中か
-	int chainCounter_;//連鎖数
+	int VerchainCounter_;//縦連鎖数
+	int HorchainCounter_;//横連鎖数
 	bool isVerticalChain_;
 	bool isHorizontalChain_;
 public:
@@ -26,8 +27,10 @@ public:
 	void SetType(int type) { type_ = type; }
 	void SetChainFlag(bool flag) { isChain_ = flag; }
 	bool GetChainFlag() { return isChain_; }
-	void SetChainCounter(int count) { chainCounter_ = count; }
-	int GetChainCounter() { return chainCounter_; }
+	void SetVerChainCounter(int count) { VerchainCounter_ = count; }
+	int GetVerChainCounter() { return VerchainCounter_; }
+	void SetHorChainCounter(int count) { HorchainCounter_ = count; }
+	int GetHorChainCounter() { return HorchainCounter_; }
 	void SetVerticalChainFlag(bool flag) { isVerticalChain_ = flag; }
 	bool GetVerticalChainFlag() { return isVerticalChain_; }
 	void SetHorizontalChainFlag(bool flag) { isHorizontalChain_ = flag; }
@@ -37,7 +40,8 @@ public:
 		this->isSelected_ = other->isSelected_;
 		this->isDrawable_ = other->isDrawable_;
 		this->isChain_ = other->isChain_;
-		this->chainCounter_ = other->chainCounter_;
+		this->VerchainCounter_ = other->VerchainCounter_;
+		this->HorchainCounter_ = other->HorchainCounter_;
 		this->isVerticalChain_ = other->isVerticalChain_;
 		this->isHorizontalChain_ = other->isHorizontalChain_;
 	}

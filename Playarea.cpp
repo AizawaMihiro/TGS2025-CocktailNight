@@ -359,8 +359,9 @@ void Playarea::ProcessMatchesAndDrop() {
 
 		if (!chainOccurred) break;
 
-		const int piecePoint = 100;
-		score_ += piecePoint * delCount;
+		const int piecePoint = 20;
+		int chainNum = CountOfChain();
+		score_ += piecePoint * chainNum * delCount;
 
 		DeleteChaindPiece(); // チェーンしたピースを非表示にする
 		DropPieces(maxType_); // 落下して空きに詰める
@@ -406,6 +407,7 @@ bool Playarea::CheckAndMarkChains() {
 				if (chainCount >= 3) {
 					for (int k = 0; k < chainCount; k++) {
 						pieces_[y - 1 - k][x]->SetVerticalChainFlag(true);
+						pieces_[y - 1 - k][x]->SetVerChainCounter(chainCount);
 					}
 					chainFlag = true;
 				}
@@ -438,6 +440,7 @@ bool Playarea::CheckAndMarkChains() {
 				if (chainCount >= 3) {
 					for (int k = 0; k < chainCount; k++) {
 						pieces_[y][x - 1 - k]->SetHorizontalChainFlag(true);
+						pieces_[y][x - 1 - k]->SetHorChainCounter(chainCount);
 					}
 					chainFlag = true;
 				}
@@ -456,4 +459,33 @@ bool Playarea::CheckAndMarkChains() {
 	}
 
 	return chainFlag;
+}
+
+int Playarea::CountOfChain()
+{
+	int maxValChain = 0;
+	int maxHorChain = 0;
+
+	// 縦方向のチェーン確認
+	for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
+		for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
+			if (pieces_[y][x]->GetVerticalChainFlag()) {
+				if (pieces_[y][x]->GetVerChainCounter() > maxValChain) {
+					maxValChain = pieces_[y][x]->GetVerChainCounter();
+				}
+			}
+		}
+	}
+	// 横方向のチェーン確認
+	for (int y = 0; y < PLAYAREA_GRID_NUM_Y; y++) {
+		for (int x = 0; x < PLAYAREA_GRID_NUM_X; x++) {
+			if (pieces_[y][x]->GetHorizontalChainFlag()) {
+				if (pieces_[y][x]->GetHorChainCounter() > maxHorChain) {
+					maxHorChain = pieces_[y][x]->GetHorChainCounter();
+				}
+			}
+		}
+	}
+
+	return maxValChain+maxHorChain;
 }
